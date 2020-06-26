@@ -1,0 +1,49 @@
+/* 
+** Un ejemplo más entretenido para poner a prueba
+** la concatenación, los bucles y las funciones.
+*/
+
+Se definen las siguientes variables globales:
+
+M es un entero que vale 4.
+
+Se definen las siguientes funciones:
+
+Factorial es una funcion que devuelve un entero.
+Recibe: un entero k.
+
+Combinatorio es una funcion que devuelve un entero.
+Recibe: un entero m, un entero n.
+
+Principal es una funcion que devuelve un entero:
+    I es un entero que vale 0.
+    Repetir mientras I sea menor o igual a M:
+        J es un entero que vale 0.
+        Mostrar " " * (M - I).
+        Repetir mientras J sea menor o igual a I:
+            Mostrar (Combinatorio evaluada en I, J) + " ".
+            Incrementar J.
+        Fin.
+        Mostrar "\n".
+        Incrementar I.
+    Fin.
+Fin.
+
+Factorial es una funcion que devuelve un entero.
+Recibe: un entero k:
+    A es un entero que vale 2.
+    R es un entero que vale 1.
+    Repetir mientras A sea menor o igual a k:
+        R ahora vale R * A.
+        Incrementar A.
+    Fin.
+    Devolver R.
+Fin.
+
+Combinatorio es una funcion que devuelve un entero.
+Recibe: un entero m, un entero n:
+    R es un entero que vale Factorial evaluada en m.
+    R ahora vale R / (Factorial evaluada en n).
+    R ahora vale R / (Factorial evaluada en (m - n)).
+    Devolver R.
+Fin.
