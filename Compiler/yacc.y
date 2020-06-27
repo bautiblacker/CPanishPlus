@@ -30,6 +30,7 @@ BORRAR MOSTRAR_R OJEADA
 /* Precedencia */
 %left suma resta
 %left mult divis
+%left expo
 %nonassoc igual distinto mayor_igual mayor menor menor_igual
 %left y
 %left o
@@ -311,6 +312,7 @@ OPERACION       : EXPRESION suma EXPRESION          {   $$ = addExpressions($1, 
                 | EXPRESION mult EXPRESION          {   $$ = multiplyExpressions($1, $3); }
                 | EXPRESION divis EXPRESION         {   $$ = divideExpressions($1, $3); }
                 | EXPRESION mod EXPRESION           {   $$ = moduleExpressions($1, $3); }
+				| EXPRESION expo EXPRESION         {   $$ = exponentExpressions($1, $3); }
                 ;
 
 EVALUAR_FUNC    : var_id evaluada_en ARGUMENTOS     {   int type = getType($1);

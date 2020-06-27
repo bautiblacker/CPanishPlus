@@ -198,6 +198,7 @@ Node * subtractExpressions(Node * n1, Node * n2);
 Node * multiplyExpressions(Node * n1, Node * n2);
 Node * divideExpressions(Node * n1, Node * n2);
 Node * moduleExpressions(Node * n1, Node * n2);
+Node * exponentExpressions(Node * n1, Node * n2);
 
 int addVar(char * name, int type);
 int getType(char * varName);
