@@ -76,6 +76,12 @@ newline         [\n]
 "Devolver "           {return devolver;}
 "Recibe"           {return recibe;}
 "Leer un caracter del teclado y guardarlo en "           {return leer_en;}
+"Agregar " {return agregar;}
+"a " {return to;}
+"Borrar " {return delete;}
+"de " {return from;}
+"Obtener " {return get;}
+
 
 -?{digit}+                      {   char * str = malloc(strlen(yytext)+1);
 			                        strcpy(str, yytext);

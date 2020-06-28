@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-typedef enum types {TYPE_EMPTY, TYPE_LITERAL, TYPE_STRING, TYPE_INT} type;
+typedef enum types {TYPE_EMPTY, TYPE_LITERAL, TYPE_STRING, TYPE_INT, TYPE_MAP} type;
 
 typedef struct Node {
 	type type;
@@ -15,6 +15,15 @@ typedef struct Node {
 	struct Node * leftChild;
     struct Node * parent;
 } Node;
+
+typedef struct MapNode {
+	char * key;
+	char * value;
+	struct MapNode * next;
+	struct MapNode * prev;
+} MapNode;
+
+MapNode * newMapNode(char * key, char * value);
 
 Node * newNode(type type, char * value);
 

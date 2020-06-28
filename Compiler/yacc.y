@@ -17,7 +17,7 @@
 }
 
 /* Tokens */
-%token principal recibe coma es t_cadena t_entero asignar reasignar punto par_abrir par_cerrar suma resta mult divis mostrar 
+%token principal recibe coma es t_cadena t_entero t_mapa asignar reasignar punto par_abrir par_cerrar suma resta mult divis mostrar 
 si fin y o protot igual mayor mayor_igual menor menor_igual distinto repetir_mientras incrementar decrementar es_funcion devuelve 
 devolver evaluada_en dos_puntos prototipo_funciones variables_globales leer_en
 %token<value> cadena entero var_id
@@ -204,10 +204,12 @@ REASIGNACION    : var_id reasignar EXPRESION        {   int type = getType($1);
 
 TIPO            : es t_cadena                       {   $$ = newNode(TYPE_STRING, "char * "); }
                 | es t_entero                       {   $$ = newNode(TYPE_INT, "int "); }
+                | es t_mapa                         {   $$ = newNode(TYPE_MAP, "t_map ")}
                 ;
 
 TIPO_F          : t_cadena                          {   $$ = newNode(TYPE_STRING, "char * "); }
                 | t_entero                          {   $$ = newNode(TYPE_INT, "int "); }
+                | t_mapa                            {   $$ = newNode(TYPE_MAP, "t_map ")}
                 ;
 
 EXPRESION       : cadena                            {   $$ = newNode(TYPE_STRING, $1); }
