@@ -45,6 +45,7 @@ newline         [\n]
 "una cola de enteros"    {return t_queue;}
 "Ojeada"            {return peek;}
 "es "               {return es;}
+"un mapa"        {return t_mapa;}
 "que vale"          {return asignar;}
 "ahora vale"        {return reasignar;}
 "Mostrar"           {return mostrar; }
@@ -91,6 +92,10 @@ newline         [\n]
 "Agregar"                   {return agregar;}
 "Borrar"                    {return borrar;}
 "a"                         {return a;}
+"de " {return de;}
+"Obtener " {return obtener;}
+"esta presente" {return presente;}
+"Sino" {return sino;}
 
 -?{digit}+                      {   char * str = malloc(strlen(yytext)+1);
 			                        strcpy(str, yytext);
