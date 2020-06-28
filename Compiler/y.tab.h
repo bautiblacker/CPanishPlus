@@ -45,41 +45,47 @@
      es = 261,
      t_cadena = 262,
      t_entero = 263,
-     asignar = 264,
-     reasignar = 265,
-     punto = 266,
-     par_abrir = 267,
-     par_cerrar = 268,
-     suma = 269,
-     resta = 270,
-     mult = 271,
-     divis = 272,
-     mostrar = 273,
-     si = 274,
-     fin = 275,
-     y = 276,
-     o = 277,
-     protot = 278,
-     igual = 279,
-     mayor = 280,
-     mayor_igual = 281,
-     menor = 282,
-     menor_igual = 283,
-     distinto = 284,
-     repetir_mientras = 285,
-     incrementar = 286,
-     decrementar = 287,
-     es_funcion = 288,
-     devuelve = 289,
-     devolver = 290,
-     evaluada_en = 291,
-     dos_puntos = 292,
-     prototipo_funciones = 293,
-     variables_globales = 294,
-     leer_en = 295,
-     cadena = 296,
-     entero = 297,
-     var_id = 298
+     t_mapa = 264,
+     asignar = 265,
+     reasignar = 266,
+     punto = 267,
+     par_abrir = 268,
+     par_cerrar = 269,
+     suma = 270,
+     resta = 271,
+     mult = 272,
+     divis = 273,
+     mostrar = 274,
+     si = 275,
+     fin = 276,
+     y = 277,
+     o = 278,
+     protot = 279,
+     igual = 280,
+     mayor = 281,
+     mayor_igual = 282,
+     menor = 283,
+     menor_igual = 284,
+     distinto = 285,
+     repetir_mientras = 286,
+     incrementar = 287,
+     decrementar = 288,
+     es_funcion = 289,
+     devuelve = 290,
+     devolver = 291,
+     evaluada_en = 292,
+     dos_puntos = 293,
+     prototipo_funciones = 294,
+     variables_globales = 295,
+     leer_en = 296,
+     agregar = 297,
+     a = 298,
+     borrar = 299,
+     de = 300,
+     obtener = 301,
+     cadena = 302,
+     entero = 303,
+     var_id = 304
    };
 #endif
 /* Tokens.  */
@@ -89,41 +95,47 @@
 #define es 261
 #define t_cadena 262
 #define t_entero 263
-#define asignar 264
-#define reasignar 265
-#define punto 266
-#define par_abrir 267
-#define par_cerrar 268
-#define suma 269
-#define resta 270
-#define mult 271
-#define divis 272
-#define mostrar 273
-#define si 274
-#define fin 275
-#define y 276
-#define o 277
-#define protot 278
-#define igual 279
-#define mayor 280
-#define mayor_igual 281
-#define menor 282
-#define menor_igual 283
-#define distinto 284
-#define repetir_mientras 285
-#define incrementar 286
-#define decrementar 287
-#define es_funcion 288
-#define devuelve 289
-#define devolver 290
-#define evaluada_en 291
-#define dos_puntos 292
-#define prototipo_funciones 293
-#define variables_globales 294
-#define leer_en 295
-#define cadena 296
-#define entero 297
-#define var_id 298
+#define t_mapa 264
+#define asignar 265
+#define reasignar 266
+#define punto 267
+#define par_abrir 268
+#define par_cerrar 269
+#define suma 270
+#define resta 271
+#define mult 272
+#define divis 273
+#define mostrar 274
+#define si 275
+#define fin 276
+#define y 277
+#define o 278
+#define protot 279
+#define igual 280
+#define mayor 281
+#define mayor_igual 282
+#define menor 283
+#define menor_igual 284
+#define distinto 285
+#define repetir_mientras 286
+#define incrementar 287
+#define decrementar 288
+#define es_funcion 289
+#define devuelve 290
+#define devolver 291
+#define evaluada_en 292
+#define dos_puntos 293
+#define prototipo_funciones 294
+#define variables_globales 295
+#define leer_en 296
+#define agregar 297
+#define a 298
+#define borrar 299
+#define de 300
+#define obtener 301
+#define cadena 302
+#define entero 303
+#define var_id 304
 
 
 
@@ -136,7 +148,7 @@ typedef union YYSTYPE
 	char * value;
 }
 /* Line 1529 of yacc.c.  */
-#line 140 "y.tab.h"
+#line 152 "y.tab.h"
 	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1

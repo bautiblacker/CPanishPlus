@@ -15,17 +15,6 @@ Node * newNode(type type, char * value)
 	return node;
 }
 
-MapNode * newMapNode(char * key, char * value) {
-    MapNode * mapNode = malloc(sizeof(MapNode));
-    mapNode->key = key;
-    mapNode->value = value;
-    mapNode->next = NULL;
-    mapNode->prev = NULL;
-    return mapNode;
-}
-
-void addMapKeyValue()
-
 void append(Node * parent, Node * node) {
     if (parent == NULL || node == NULL)
         return;

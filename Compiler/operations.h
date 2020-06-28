@@ -33,7 +33,64 @@ static char * getCharToVar = "char * _getchar_to_var() {\n"
                                 "\tstr[0] = getchar();\n"
                                 "\tstr[1] = 0;\n"
                                 "\treturn str;\n"
-                                "}\n";                                    
+                                "}\n";        
+
+
+static char * mapStructure = "typedef struct MapNode {\n"
+                                "char * key;\n"
+                                "char * value;\n"
+                                "struct MapNode * next;\n"
+                                "struct MapNode * prev;\n"
+                                "} MapNode;\n";
+
+
+static char * addMapNode = "MapNode * addKeyValue(MapNode * map, char * key, char * value) {\n"
+                                "MapNode * present = search(map, key);\n"
+                                "if (present != NULL) {\n"
+                                    "present->value = value;\n"
+                                    "return map;\n"
+                                "}\n"
+                                "if (map == NULL) {\n"
+                                    "return newMapNode(key, value);\n"
+                                "} else {\n"
+                                    "MapNode * current = map;\n"
+                                    "while(current->next != NULL) {\n"
+                                        "current = current->next;\n"
+                                    "}\n"
+                                    "current->next = newMapNode(key, value);\n"
+                                    "current->next->prev = current;\n"
+                                    "return map;\n"
+                                "}\n"
+                            "}\n";
+
+static char * searchMapNode = "MapNode * search(MapNode * map, char * key) {\n"
+                                    "MapNode * current = map;\n"
+                                    "while(current != NULL) {\n"
+                                        "if (strcmp(current->key, key) == 0) {\n"
+                                            "return current;\n"
+                                        "}\n"
+                                        "current = current->next;\n"
+                                    "}\n"
+                                    "return NULL;\n"
+                                "}\n";
+
+static char * newMapNode = "MapNode * newMapNode(char * key, char * value) {\n"
+                                "MapNode * mapNode = malloc(sizeof(MapNode));\n"
+                                "mapNode->key = key;\n"
+                                "mapNode->value = value;\n"
+                                "mapNode->next = NULL;\n"
+                                "mapNode->prev = NULL;\n"
+                                "return mapNode;\n"
+                            "}\n";
+
+static char * getMapNode = "char * getValue(MapNode * map, char * key) {\n"
+                                "MapNode * present = search(map, key);\n"
+                                "if (present == NULL) return NULL;\n"
+                                "return present->value;\n"
+                            "}\n";
+                                
+                            
+                                                
 
 Node * addExpressions(Node * n1, Node * n2);
 Node * subtractExpressions(Node * n1, Node * n2);

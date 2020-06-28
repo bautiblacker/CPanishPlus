@@ -16,15 +16,6 @@ typedef struct Node {
     struct Node * parent;
 } Node;
 
-typedef struct MapNode {
-	char * key;
-	char * value;
-	struct MapNode * next;
-	struct MapNode * prev;
-} MapNode;
-
-MapNode * newMapNode(char * key, char * value);
-
 Node * newNode(type type, char * value);
 
 void append(Node * parent, Node * node);

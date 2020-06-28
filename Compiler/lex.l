@@ -36,6 +36,7 @@ newline         [\n]
 ","                 {return coma;}
 "un entero"      {return t_entero;}
 "una cadena"     {return t_cadena;}
+"un mapa"        {return t_mapa;}
 "es "            {return es;}
 "que vale"          {return asignar;}
 "ahora vale"        {return reasignar;}
@@ -77,11 +78,9 @@ newline         [\n]
 "Recibe"           {return recibe;}
 "Leer un caracter del teclado y guardarlo en "           {return leer_en;}
 "Agregar " {return agregar;}
-"a " {return to;}
-"Borrar " {return delete;}
-"de " {return from;}
-"Obtener " {return get;}
-
+"a " {return a;}
+"Borrar " {return borrar;}
+"de " {return de;}
 
 -?{digit}+                      {   char * str = malloc(strlen(yytext)+1);
 			                        strcpy(str, yytext);

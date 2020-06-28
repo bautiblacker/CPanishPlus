@@ -19,11 +19,12 @@
 /* Tokens */
 %token principal recibe coma es t_cadena t_entero t_mapa asignar reasignar punto par_abrir par_cerrar suma resta mult divis mostrar 
 si fin y o protot igual mayor mayor_igual menor menor_igual distinto repetir_mientras incrementar decrementar es_funcion devuelve 
-devolver evaluada_en dos_puntos prototipo_funciones variables_globales leer_en
+devolver evaluada_en dos_puntos prototipo_funciones variables_globales leer_en agregar a borrar de obtener
 %token<value> cadena entero var_id
 %type<node> PROGRAMA PRINCIPAL LISTA_PARAMETROS PARAMETROS PARAMETRO LINEA LINEAS INSTRUCCION DECLARACION ASIGNACION REASIGNACION 
 TIPO TIPO_F EXPRESION OPERACION FUNCION_BUILTIN MOSTRAR BLOQUE CONDICIONAL COMPARADOR EVALUACION REPETIR INCREMENTACION DECREMENTACION 
 FUNCION FUNCIONES FIN DEVOLVER NUEVO_ALCANCE ARGUMENTOS EVALUAR_FUNC PROTOTIPO PROTOTIPOS LISTA_VAR LISTA_PROTO VARIABLE VARIABLES LEER_CHAR
+AGREGAR OBTENER BORRAR
 %start PROGRAMA
 
 /* Precedencia */
@@ -154,6 +155,9 @@ INSTRUCCION     : REASIGNACION                      {   $$ = $1; }
                 | DECREMENTACION                    {   $$ = $1; }
                 | DEVOLVER                          {   $$ = $1; }
                 | EXPRESION                         {   $$ = $1; }
+                | AGREGAR                           {   $$ = $1; }
+                | BORRAR                            {   $$ = $1; }
+                | OBTENER                           {   $$ = $1; }
                 ;
 
 
@@ -177,6 +181,7 @@ DECLARACION     : var_id TIPO ASIGNACION            {   if (isInCurrentScope($1)
                                                         if (addVar($1, $2->type) == -1)
                                                             yyerror("Se superó el límite de variables\n");
                                                         if ($3 != NULL && $2->type != $3->type) {
+                                                            if($2->type != $3->type) yyerror("dif types tambien\n");
                                                             yyerror("Asignación entre tipos incompatibles\n");
                                                         }
                                                         $$ = newNode(TYPE_EMPTY, NULL);
@@ -204,12 +209,12 @@ REASIGNACION    : var_id reasignar EXPRESION        {   int type = getType($1);
 
 TIPO            : es t_cadena                       {   $$ = newNode(TYPE_STRING, "char * "); }
                 | es t_entero                       {   $$ = newNode(TYPE_INT, "int "); }
-                | es t_mapa                         {   $$ = newNode(TYPE_MAP, "t_map ")}
+                | es t_mapa                         {   $$ = newNode(TYPE_MAP, "MapNode * "); }
                 ;
 
 TIPO_F          : t_cadena                          {   $$ = newNode(TYPE_STRING, "char * "); }
                 | t_entero                          {   $$ = newNode(TYPE_INT, "int "); }
-                | t_mapa                            {   $$ = newNode(TYPE_MAP, "t_map ")}
+                | t_mapa                            {   $$ = newNode(TYPE_MAP, "MapNode * "); }
                 ;
 
 EXPRESION       : cadena                            {   $$ = newNode(TYPE_STRING, $1); }
@@ -229,6 +234,14 @@ EXPRESION       : cadena                            {   $$ = newNode(TYPE_STRING
                                                         } }
                 | OPERACION                         {   $$ = $1; }
                 | EVALUAR_FUNC                      {   $$ = $1; }
+                | par_abrir OBTENER par_cerrar      {   if ($2->value != NULL) {
+                                                            $$ = $2;
+                                                        } else  {
+                                                            $$ = newNode(TYPE_STRING, NULL); 
+                                                            append($$, newNode(TYPE_LITERAL, "("));
+                                                            append($$, $2);
+                                                            append($$, newNode(TYPE_LITERAL, ")")); 
+                                                        } }
                 ;
 
 OPERACION       : EXPRESION suma EXPRESION          {   $$ = addExpressions($1, $3); }
@@ -335,6 +348,37 @@ COMPARADOR      : igual                             {   $$ = newNode(TYPE_LITERA
                 | distinto                          {   $$ = newNode(TYPE_LITERAL, " != "); }     
                 ;             
 
+AGREGAR         : agregar EXPRESION EXPRESION a var_id          {   int type = getType($5);
+                                                                    if (type == -1)
+                                                                        yyerror("Variable no declarada previamente\n");
+                                                                    if (type != TYPE_MAP)
+                                                                        yyerror("Asignación entre tipos incompatibles\n");
+
+                                                                    $$ = newNode(TYPE_EMPTY, NULL); 
+                                                                    append($$, newNode(TYPE_LITERAL, "addKeyValue(")); 
+                                                                    append($$, newNode(TYPE_LITERAL, $5)); 
+                                                                    append($$, newNode(TYPE_LITERAL, ","));
+                                                                    append($$, $2);
+                                                                    append($$, newNode(TYPE_LITERAL, ","));
+                                                                    append($$, $3);
+                                                                    append($$, newNode(TYPE_LITERAL, ")")); }
+
+OBTENER         : var_id de var_id                              {   int type = getType($3);
+                                                                    if (type == -1)
+                                                                        yyerror("Variable no declarada previamente\n");
+                                                                    if (type != TYPE_MAP) {
+                                                                        yyerror("Asignación entre tipos incompatibles\n");
+                                                                    }
+
+                                                                    $$ = newNode(TYPE_EMPTY, NULL); 
+                                                                    append($$, newNode(TYPE_LITERAL, "getValue(")); 
+                                                                    append($$, newNode(TYPE_LITERAL, $3)); 
+                                                                    append($$, newNode(TYPE_LITERAL, ","));
+                                                                    append($$, newNode(TYPE_LITERAL, $1));
+                                                                    append($$, newNode(TYPE_LITERAL, ")")); }
+
+BORRAR          : borrar var_id de var_id              {}
+
 %%
 
 void yyerror(char * s){
@@ -359,4 +403,9 @@ void printHeaders() {
     fprintf(tmpFile, "%s" , strIntCatFunction);
     fprintf(tmpFile, "%s" , strIntMultFunction);
     fprintf(tmpFile, "%s" , getCharToVar);
+    fprintf(tmpFile, "%s" , mapStructure);
+    fprintf(tmpFile, "%s" , searchMapNode);
+    fprintf(tmpFile, "%s" , newMapNode);
+    fprintf(tmpFile, "%s" , getMapNode);
+    fprintf(tmpFile, "%s" , addMapNode);
 }

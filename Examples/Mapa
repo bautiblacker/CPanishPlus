@@ -5,7 +5,7 @@
 Principal es una funcion que devuelve un entero:
     Mostrar "¡Bienvenido! Vamos a crear un mapa.\n".
 
-    Mostrar "Inserte las claves, acompañadas de su valor de la siguiente manera: \nLLAVE => VALOR\nLLAVE => VALOR\n".
+    Mostrar "Inserte las claves, acompañadas de su valor de la siguiente manera: \nLLAVE:VALOR\nLLAVE:VALOR\n".
     Mostrar "Una vez que finalice, escriba: Listo!\n".
 
     FRASE es una cadena que vale "".
@@ -13,25 +13,29 @@ Principal es una funcion que devuelve un entero:
     VALOR es una cadena que vale "".
     CARACTER es una cadena que vale "".
 
+    MAPA es un mapa.
+
     Repetir mientras CARACTER sea distinto a "\n":
         FRASE ahora vale FRASE + CARACTER.
-        Leer un caracter del teclado y guardarlo en CARACTER.
-    Fin.
 
-    Repetir mientras FRASE sea distinto a "Listo!":
-        Mostrar "Ingresaste la siguiente frase: " + FRASE + "\n".
-        /*
-            Aca tengo que agregar key-value al mapa.
-        */
-
-        FRASE ahora vale "".
-        CARACTER ahora vale "".
-
-        Repetir mientras CARACTER sea distinto a "\n":
-            FRASE ahora vale FRASE + CARACTER.
+        Repetir mientras CARACTER sea distinto a ":":
+            LLAVE ahora vale LLAVE + CARACTER.
             Leer un caracter del teclado y guardarlo en CARACTER.
         Fin.
+
+        CARACTER ahora vale "".
+
+        Si LLAVE + CARACTER es distinto a "Listo!":
+            Repetir mientras CARACTER sea distinto a "\n":
+                VALOR ahora vale VALOR + CARACTER.
+                Leer un caracter del teclado y guardarlo en CARACTER.
+            Fin.
+        Fin.
     Fin.
+
+    Agregar LLAVE VALOR a MAPA.
+
+    Mostrar "Fin de ciclo\n".
 
     Mostrar "Ahora seleccione una Llave ingresada para obtener el valor, una vez que quiera finalizar escriba: Listo!\n".
 
@@ -45,8 +49,11 @@ Principal es una funcion que devuelve un entero:
     Fin.
 
     Repetir mientras FRASE sea distinto a "Listo!":
+        
+        RESULTADO es una cadena que vale (FRASE de MAPA).
 
-        Mostrar "Estas buscando el valor para la frase: " + FRASE + "\n".
+        Mostrar "Estas buscando el valor para la llave: " + FRASE + "\n".
+        Mostrar "El valor para esa llave es: " + RESULTADO + "\n".
 
         FRASE ahora vale "".
         CARACTER ahora vale "".
