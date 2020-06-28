@@ -17,9 +17,9 @@
 }
 
 /* Tokens */
-%token principal recibe coma es t_cadena t_entero t_lista_enteros asignarList asignar reasignar punto par_abrir par_cerrar suma resta mult divis mod mostrar
+%token principal recibe coma es t_cadena t_entero t_lista_enteros asignar reasignar punto par_abrir par_cerrar suma resta mult divis mod mostrar
 si fin y o protot igual mayor mayor_igual menor menor_igual distinto repetir_mientras incrementar decrementar es_funcion devuelve
-devolver evaluada_en dos_puntos prototipo_funciones variables_globales leer_en
+devolver evaluada_en dos_puntos prototipo_funciones variables_globales leer_en agregar a
 %token<value> cadena entero lista var_id
 %type<node> PROGRAMA PRINCIPAL LISTA_PARAMETROS PARAMETROS PARAMETRO LINEA LINEAS INSTRUCCION DECLARACION ASIGNACION REASIGNACION
 TIPO TIPO_F EXPRESION OPERACION FUNCION_BUILTIN MOSTRAR BLOQUE CONDICIONAL COMPARADOR EVALUACION REPETIR INCREMENTACION DECREMENTACION
@@ -191,8 +191,19 @@ ASIGNACION      :                                   {   $$ = NULL; }
                                                         append($$, newNode(TYPE_LITERAL, " = "));
                                                         append($$, $2); }
                 ;
-AGREGAR         : agregar EXPRESION a DESTINO       {   $$ = addNodeToList(TYPE_INT, $1, $3) }
+AGREGAR         : agregar EXPRESION a var_id       {   int type = getType($4);
+                                                            if (type == -1)
+                                                                yyerror("Variable no declarada previamente\n");
+                                                            if (type != TYPE_LIST)
+                                                                yyerror("Asignación entre tipos incompatibles\n");
 
+                                                            $$ = newNode(TYPE_EMPTY, NULL);
+                                                            append($$, newNode(TYPE_LITERAL, "addListNode("));
+                                                            append($$, newNode(TYPE_LITERAL, $2));
+                                                            append($$, newNode(TYPE_LITERAL, ","));
+                                                            append($$, $4);
+                                                            append($$, newNode(TYPE_LITERAL, ")")); }
+                ;
 REASIGNACION    : var_id reasignar EXPRESION        {   int type = getType($1);
                                                         if (type == -1)
                                                             yyerror("Variable o funcion no declarada previamente\n");
@@ -206,11 +217,12 @@ REASIGNACION    : var_id reasignar EXPRESION        {   int type = getType($1);
 
 TIPO            : es t_cadena                       {   $$ = newNode(TYPE_STRING, "char * "); }
                 | es t_entero                       {   $$ = newNode(TYPE_INT, "int "); }
-                | es t_lista_enteros                {   $$ = newNode("TYPE_INT", "l_node * "); }
+                | es t_lista_enteros                {   $$ = newNode(TYPE_LIST, "l_node * "); }
                 ;
 
 TIPO_F          : t_cadena                          {   $$ = newNode(TYPE_STRING, "char * "); }
                 | t_entero                          {   $$ = newNode(TYPE_INT, "int "); }
+                | t_lista_enteros                   {   $$ = newNode(TYPE_LIST, "l_node * "); }
                 ;
 
 EXPRESION       : cadena                            {   $$ = newNode(TYPE_STRING, $1); }
@@ -230,7 +242,6 @@ EXPRESION       : cadena                            {   $$ = newNode(TYPE_STRING
                                                         } }
                 | OPERACION                         {   $$ = $1; }
                 | EVALUAR_FUNC                      {   $$ = $1; }
-                | agregar                           { $$ = newNode(TYPE_INT, $1) }
                 ;
 
 OPERACION       : EXPRESION suma EXPRESION          {   $$ = addExpressions($1, $3); }
@@ -278,8 +289,8 @@ LEER_CHAR       : leer_en var_id                    {   int type = getType($2);
 
                                                         $$ = newNode(TYPE_EMPTY, NULL);
                                                         append($$, newNode(TYPE_LITERAL, $2));
-                                                        append($$, newNode(TYPE_LITERAL, " = _getchar_to_var()"));
-    };
+                                                        append($$, newNode(TYPE_LITERAL, " = _getchar_to_var()")); }
+                ;
 
 CONDICIONAL     : si EVALUACION dos_puntos LINEAS FIN               {   $$ = newNode(TYPE_EMPTY, NULL);
                                                                         append($$, newNode(TYPE_LITERAL, "if("));
@@ -361,4 +372,7 @@ void printHeaders() {
     fprintf(tmpFile, "%s" , strIntCatFunction);
     fprintf(tmpFile, "%s" , strIntMultFunction);
     fprintf(tmpFile, "%s" , getCharToVar);
+    fprintf(tmpFile, "%s", listStructure);
+    fprintf(tmpFile, "%s", newListNodeL);
+    fprintf(tmpFile, "%s", addListNodeL);
 }

@@ -239,7 +239,3 @@ void closeScope() {
     while(varTableIndex > 0 && varTable[varTableIndex - 1].scope > currScope)
         varTableIndex--;
 }
-
-Node * addNodeToList(type type, char * value, Node * list) {
-
-}

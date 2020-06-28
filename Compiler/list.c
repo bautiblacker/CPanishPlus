@@ -1,10 +1,10 @@
 #include "list.h"
 #include "compiler.h"
+#include "stdlib.h"
 
 #define MAX_VAR 10
 
 typedef enum opList {ADD, REMOVE, DELETE, PEEK} opList;
-l_node * first = NULL;
 int size = 0;
 
 typedef struct varList {
@@ -18,18 +18,17 @@ int varTableIndex = 0;
 int currScope = 0;
 int vars = 0;
 
-static l_node * newListNode(l_type type, char * value) {
+static l_node * newListNode(char * value) {
 	l_node * node = malloc(sizeof(l_node));
-	node->type = type;
 	node->value = value;
     node->next = NULL;
     node->prev = NULL;
 	return node;
 }
 
-l_node * addListNode(l_type type, char * value) {
+l_node * addListNode(char * value, l_node * first) {
     if(first == NULL) {
-        first = newListNode(type, value);
+        first = newListNode(value);
         return first;
     }
 
@@ -38,7 +37,7 @@ l_node * addListNode(l_type type, char * value) {
         aux = aux->next;
     }
 
-    l_node * newNode = newListNode(type, value);
+    l_node * newNode = newListNode(value);
     aux->next = newNode;
     newNode->next = NULL;
     newNode->prev = aux;
@@ -46,7 +45,7 @@ l_node * addListNode(l_type type, char * value) {
     return first;
 }
 
-l_node * removeFromList(char * value) {
+l_node * removeFromList(char * value, l_node * first) {
     if(strcmp(first->value, value) == 0) {
         if(size > 1) {
             first->next->prev = NULL;

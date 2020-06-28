@@ -34,6 +34,36 @@ static char * getCharToVar = "char * _getchar_to_var() {\n"
                                 "\tstr[1] = 0;\n"
                                 "\treturn str;\n"
                                 "}\n";
+static char * listStructure = "typedef struct lNode {\n"
+                                "char * value;\n"
+                                "struct lNode * next;\n"
+                                "struct lNode * prev;\n"
+                            "} l_node;\n";
+static char * newListNodeL = "static l_node * newListNode(char * value) {\n"
+                                "l_node * node = malloc(sizeof(l_node));\n"
+                                "node->value = value;\n"
+                                "node->next = NULL;\n"
+                                "node->prev = NULL;\n"
+                                "return node;\n"
+                            "}\n";
+
+static char * addListNodeL = "l_node * addListNode(char * value, l_node * first) {\n"
+                                "if(first == NULL) {\n"
+                                "\tfirst = newListNode(value);\n"
+                                "\treturn first;\n"
+                                "}\n"
+
+                                "l_node * aux = first;\n"
+                                "while(aux->next != NULL) {\n"
+                                "\taux = aux->next;\n"
+                                "}\n"
+
+                                "l_node * newNode = newListNode(value);\n"
+                                "aux->next = newNode;\n"
+                                "newNode->next = NULL;\n"
+                                "newNode->prev = aux;\n"
+                                "return first;\n"
+                            "}\n";
 
 Node * addExpressions(Node * n1, Node * n2);
 Node * subtractExpressions(Node * n1, Node * n2);

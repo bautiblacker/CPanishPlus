@@ -1,8 +1,31 @@
 
+/* Prototipos */
+Se definen las siguientes funciones:
+
+ValidarCaracter es una funcion que devuelve un entero.
+Recibe: una cadena c.
+
 Principal es una funcion que devuelve un entero:
     Mostrar "¡Bienvenido al ejemplo de Listas!\n".
-    Mostrar "La idea de este ejemplo es mostrar el funcionamiento de las listas\n"
-    LIST1 es una lista de enteros.
-    Mostrar "Creamos una lista que se llama LISTA1, le vamos a agregar los valores 1,2,3 y 4"
+    Mostrar "La idea de este ejemplo es mostrar el funcionamiento de las listas\n".
+    Mostrar "Creamos una lista que se llama LISTA1 que contendrá enteros\n".
+    Mostrar "Ahora vamos a agregarle valores a la lista y para eso escriba cada valor seguido por un salto de linea\nUna vez que no quiera agregar mas valores, escriba: Listo!\n".
+
+    LISTA1 es una lista de enteros.
+    VALOR es un entero que vale 0.
+    CARACTER es una cadena que vale "".
+    NUMBER es una cadena que vale "".
+    IsValid es un entero que vale 0.
+    INPUT es una cadena que vale "".
+
+    Agregar "1" a LISTA1.
+
 Fin.
-.
+
+ValidarCaracter es una funcion que devuelve un entero.
+Recibe: una cadena c:
+    Si c es igual a "1" o c es igual a "2" o c es igual a "3" o c es igual a "4" o c es igual a "5" o c es igual a "6" o c es igual a "7" o c es igual a "8" o c es igual a "9" o c es igual a "0":
+        Devolver 1.
+    Fin.
+    Devolver 0.
+Fin.

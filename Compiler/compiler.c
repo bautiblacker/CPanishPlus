@@ -44,7 +44,7 @@ void argParse(int argc, char *argv[], struct op_values * op) {
         case ':':
             fprintf(stdout, "Opción '%s' requiere un argumento\n", argv[optind - 1]);
             break;
-        case '?': 
+        case '?':
         default:
             fprintf(stdout, "Opción '%s' desconocida\n", argv[optind - 1]);
             exit(1);
@@ -75,7 +75,7 @@ void freeResources() {
 
 void compileC(char * outputFile, int preserveTmp) {
     char commandBuffer[256];
-    sprintf(commandBuffer, "gcc %s -o %s", TMP_FILE_NAME, outputFile);
+    sprintf(commandBuffer, "gcc %s -o %s -g", TMP_FILE_NAME, outputFile);
 
     int gccStatus = system(commandBuffer);
 
