@@ -3,7 +3,7 @@
 
 #define MAX_VAR 100
 
-typedef enum operations {SUMA, RESTA, MULT, DIV} operation;
+typedef enum operations {SUMA, RESTA, MULT, DIV, MOD} operation;
 
 typedef struct var {
     char * name;
@@ -51,7 +51,7 @@ Node * addExpressions(Node * n1, Node * n2) {
             } else {
                 strcpy(value, "\"");
                 strcpy(value + 1, n1->value);
-                strcpy(value + len1 + 1, n2->value + 1);   
+                strcpy(value + len1 + 1, n2->value + 1);
             }
             ret = newNode(TYPE_STRING, value);
         } else {
@@ -86,6 +86,19 @@ Node * subtractExpressions(Node * n1, Node * n2) {
     }
 
     return ret;
+}
+
+Node * moduleExpressions(Node * n1,  Node * n2) {
+    Node * ret;
+
+    if (n1->type == TYPE_INT && n2->type == TYPE_INT) {
+        ret = intOperation(n1, n2, MOD);
+    } else {
+        yyerror("Resta entre tipos incompatibles.\n");
+    }
+
+    return ret;
+
 }
 
 Node * multiplyExpressions(Node * n1, Node * n2) {
@@ -139,7 +152,6 @@ Node * divideExpressions(Node * n1, Node * n2) {
 
 Node * intOperation(Node * n1, Node * n2, operation op) {
     Node * ret;
-
     if (n1->value != NULL && n2->value != NULL) {
         int i1 = atoi(n1->value);
         int i2 = atoi(n2->value);
@@ -158,6 +170,8 @@ Node * intOperation(Node * n1, Node * n2, operation op) {
             case DIV:
                 res = i1 / i2;
                 break;
+            case MOD:
+                res = i1 % i2;
         }
         sprintf(value, "%d", res);
         ret = newNode(TYPE_INT, value);
@@ -178,6 +192,8 @@ Node * intOperation(Node * n1, Node * n2, operation op) {
             case DIV:
                 opStr = " / ";
                 break;
+            case MOD:
+                opStr = " % ";
         }
         append(ret, newNode(TYPE_LITERAL, opStr));
         append(ret, n2);
@@ -222,4 +238,8 @@ void closeScope() {
     currScope--;
     while(varTableIndex > 0 && varTable[varTableIndex - 1].scope > currScope)
         varTableIndex--;
+}
+
+Node * addNodeToList(type type, char * value, Node * list) {
+
 }

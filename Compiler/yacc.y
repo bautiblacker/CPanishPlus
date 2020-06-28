@@ -1,7 +1,7 @@
 %{
 	#include <stdio.h>
     #include "node.h"
-    #include "operations.h"    
+    #include "operations.h"
     #include "compiler.h"
 
     extern int lineCount;
@@ -17,13 +17,13 @@
 }
 
 /* Tokens */
-%token principal recibe coma es t_cadena t_entero asignar reasignar punto par_abrir par_cerrar suma resta mult divis mostrar 
-si fin y o protot igual mayor mayor_igual menor menor_igual distinto repetir_mientras incrementar decrementar es_funcion devuelve 
+%token principal recibe coma es t_cadena t_entero t_lista_enteros asignarList asignar reasignar punto par_abrir par_cerrar suma resta mult divis mod mostrar
+si fin y o protot igual mayor mayor_igual menor menor_igual distinto repetir_mientras incrementar decrementar es_funcion devuelve
 devolver evaluada_en dos_puntos prototipo_funciones variables_globales leer_en
-%token<value> cadena entero var_id
-%type<node> PROGRAMA PRINCIPAL LISTA_PARAMETROS PARAMETROS PARAMETRO LINEA LINEAS INSTRUCCION DECLARACION ASIGNACION REASIGNACION 
-TIPO TIPO_F EXPRESION OPERACION FUNCION_BUILTIN MOSTRAR BLOQUE CONDICIONAL COMPARADOR EVALUACION REPETIR INCREMENTACION DECREMENTACION 
-FUNCION FUNCIONES FIN DEVOLVER NUEVO_ALCANCE ARGUMENTOS EVALUAR_FUNC PROTOTIPO PROTOTIPOS LISTA_VAR LISTA_PROTO VARIABLE VARIABLES LEER_CHAR
+%token<value> cadena entero lista var_id
+%type<node> PROGRAMA PRINCIPAL LISTA_PARAMETROS PARAMETROS PARAMETRO LINEA LINEAS INSTRUCCION DECLARACION ASIGNACION REASIGNACION
+TIPO TIPO_F EXPRESION OPERACION FUNCION_BUILTIN MOSTRAR BLOQUE CONDICIONAL COMPARADOR EVALUACION REPETIR INCREMENTACION DECREMENTACION
+FUNCION FUNCIONES FIN DEVOLVER NUEVO_ALCANCE ARGUMENTOS EVALUAR_FUNC PROTOTIPO PROTOTIPOS LISTA_VAR LISTA_PROTO VARIABLE VARIABLES LEER_CHAR AGREGAR
 %start PROGRAMA
 
 /* Precedencia */
@@ -99,7 +99,7 @@ FUNCION         : var_id es_funcion devuelve TIPO_F LISTA_PARAMETROS dos_puntos 
                                                                                                     append($$, newNode(TYPE_LITERAL, "}\n")); }
                 ;
 
-FUNCIONES       : NUEVO_ALCANCE FUNCION FUNCIONES               {   $$ = newNode(TYPE_EMPTY, NULL); 
+FUNCIONES       : NUEVO_ALCANCE FUNCION FUNCIONES               {   $$ = newNode(TYPE_EMPTY, NULL);
                                                                     append($$, $2);
                                                                     append($$, $3); }
                 |                                               {   $$ = NULL; }
@@ -154,6 +154,7 @@ INSTRUCCION     : REASIGNACION                      {   $$ = $1; }
                 | DECREMENTACION                    {   $$ = $1; }
                 | DEVOLVER                          {   $$ = $1; }
                 | EXPRESION                         {   $$ = $1; }
+                | AGREGAR                           {   $$ = $1; }
                 ;
 
 
@@ -188,8 +189,9 @@ DECLARACION     : var_id TIPO ASIGNACION            {   if (isInCurrentScope($1)
 ASIGNACION      :                                   {   $$ = NULL; }
                 | asignar EXPRESION                 {   $$ = newNode($2->type, NULL);
                                                         append($$, newNode(TYPE_LITERAL, " = "));
-                                                        append($$, $2); }               
+                                                        append($$, $2); }
                 ;
+AGREGAR         : agregar EXPRESION a DESTINO       {   $$ = addNodeToList(TYPE_INT, $1, $3) }
 
 REASIGNACION    : var_id reasignar EXPRESION        {   int type = getType($1);
                                                         if (type == -1)
@@ -204,6 +206,7 @@ REASIGNACION    : var_id reasignar EXPRESION        {   int type = getType($1);
 
 TIPO            : es t_cadena                       {   $$ = newNode(TYPE_STRING, "char * "); }
                 | es t_entero                       {   $$ = newNode(TYPE_INT, "int "); }
+                | es t_lista_enteros                {   $$ = newNode("TYPE_INT", "l_node * "); }
                 ;
 
 TIPO_F          : t_cadena                          {   $$ = newNode(TYPE_STRING, "char * "); }
@@ -220,19 +223,21 @@ EXPRESION       : cadena                            {   $$ = newNode(TYPE_STRING
                 | par_abrir EXPRESION par_cerrar    {   if ($2->value != NULL) {
                                                             $$ = $2;
                                                         } else  {
-                                                            $$ = newNode($2->type, NULL); 
+                                                            $$ = newNode($2->type, NULL);
                                                             append($$, newNode(TYPE_LITERAL, "("));
                                                             append($$, $2);
-                                                            append($$, newNode(TYPE_LITERAL, ")")); 
+                                                            append($$, newNode(TYPE_LITERAL, ")"));
                                                         } }
                 | OPERACION                         {   $$ = $1; }
                 | EVALUAR_FUNC                      {   $$ = $1; }
+                | agregar                           { $$ = newNode(TYPE_INT, $1) }
                 ;
 
 OPERACION       : EXPRESION suma EXPRESION          {   $$ = addExpressions($1, $3); }
                 | EXPRESION resta EXPRESION         {   $$ = subtractExpressions($1, $3); }
                 | EXPRESION mult EXPRESION          {   $$ = multiplyExpressions($1, $3); }
                 | EXPRESION divis EXPRESION         {   $$ = divideExpressions($1, $3); }
+                | EXPRESION mod EXPRESION           {   $$ = moduleExpressions($1, $3); }
                 ;
 
 EVALUAR_FUNC    : var_id evaluada_en ARGUMENTOS     {   int type = getType($1);
@@ -261,7 +266,7 @@ MOSTRAR         : mostrar EXPRESION                 {   $$ = newNode(TYPE_EMPTY,
                                                             append($$, newNode(TYPE_LITERAL, "printf(\"%s\", "));
                                                         if ($2->type == TYPE_INT)
                                                             append($$, newNode(TYPE_LITERAL, "printf(\"%d\", "));
-                                                        append($$, $2); 
+                                                        append($$, $2);
                                                         append($$, newNode(TYPE_LITERAL, ")")); }
                 ;
 
@@ -270,27 +275,27 @@ LEER_CHAR       : leer_en var_id                    {   int type = getType($2);
                                                             yyerror("Variable no declarada previamente\n");
                                                         if (type != TYPE_STRING)
                                                             yyerror("Asignación entre tipos incompatibles\n");
-    
+
                                                         $$ = newNode(TYPE_EMPTY, NULL);
                                                         append($$, newNode(TYPE_LITERAL, $2));
                                                         append($$, newNode(TYPE_LITERAL, " = _getchar_to_var()"));
     };
 
-CONDICIONAL     : si EVALUACION dos_puntos LINEAS FIN               {   $$ = newNode(TYPE_EMPTY, NULL); 
-                                                                        append($$, newNode(TYPE_LITERAL, "if(")); 
-                                                                        append($$, $2); 
+CONDICIONAL     : si EVALUACION dos_puntos LINEAS FIN               {   $$ = newNode(TYPE_EMPTY, NULL);
+                                                                        append($$, newNode(TYPE_LITERAL, "if("));
+                                                                        append($$, $2);
                                                                         append($$, newNode(TYPE_LITERAL, ")"));
                                                                         append($$, newNode(TYPE_LITERAL, "{\n"));
-                                                                        append($$, $4); 
+                                                                        append($$, $4);
                                                                         append($$, newNode(TYPE_LITERAL, "}\n")); }
                 ;
 
-REPETIR         : repetir_mientras EVALUACION dos_puntos LINEAS FIN {   $$ = newNode(TYPE_EMPTY, NULL); 
-                                                                        append($$, newNode(TYPE_LITERAL, "while(")); 
-                                                                        append($$, $2); 
+REPETIR         : repetir_mientras EVALUACION dos_puntos LINEAS FIN {   $$ = newNode(TYPE_EMPTY, NULL);
+                                                                        append($$, newNode(TYPE_LITERAL, "while("));
+                                                                        append($$, $2);
                                                                         append($$, newNode(TYPE_LITERAL, ")"));
                                                                         append($$, newNode(TYPE_LITERAL, "{\n"));
-                                                                        append($$, $4); 
+                                                                        append($$, $4);
                                                                         append($$, newNode(TYPE_LITERAL, "}\n")); }
                 ;
 
@@ -304,47 +309,46 @@ EVALUACION      : EXPRESION COMPARADOR EXPRESION                    {   $$ = new
                                                                             append($$, $2);
                                                                             append($$, newNode(TYPE_LITERAL, "0"));
                                                                         } else if ($1->type == TYPE_INT && $3->type == TYPE_INT) {
-                                                                            append($$, $1); 
-                                                                            append($$, $2); 
+                                                                            append($$, $1);
+                                                                            append($$, $2);
                                                                             append($$, $3);
                                                                         } else {
                                                                             yyerror("Comparación entre tipos incompatibles");
                                                                         } }
-                | EVALUACION y EVALUACION                           {   $$ = newNode(TYPE_EMPTY, NULL); 
-                                                                        append($$, $1); 
+                | EVALUACION y EVALUACION                           {   $$ = newNode(TYPE_EMPTY, NULL);
+                                                                        append($$, $1);
                                                                         append($$, newNode(TYPE_LITERAL, " && "));
                                                                         append($$, $3);                           }
-                | EVALUACION o EVALUACION                           {   $$ = newNode(TYPE_EMPTY, NULL); 
-                                                                        append($$, $1); 
+                | EVALUACION o EVALUACION                           {   $$ = newNode(TYPE_EMPTY, NULL);
+                                                                        append($$, $1);
                                                                         append($$, newNode(TYPE_LITERAL, " || "));
                                                                         append($$, $3);                           }
-                | par_abrir EVALUACION par_cerrar                   {   $$ = newNode(TYPE_EMPTY, NULL); 
-                                                                        append($$, newNode(TYPE_LITERAL, "(")); 
-                                                                        append($$, $2); 
+                | par_abrir EVALUACION par_cerrar                   {   $$ = newNode(TYPE_EMPTY, NULL);
+                                                                        append($$, newNode(TYPE_LITERAL, "("));
+                                                                        append($$, $2);
                                                                         append($$, newNode(TYPE_LITERAL, ")"));   }
                 | EXPRESION                                         {   $$ = $1;                                  }
                 ;
 
-COMPARADOR      : igual                             {   $$ = newNode(TYPE_LITERAL, " == "); }    
-                | mayor                             {   $$ = newNode(TYPE_LITERAL, " > "); }    
-                | mayor_igual                       {   $$ = newNode(TYPE_LITERAL, " >= "); }    
-                | menor                             {   $$ = newNode(TYPE_LITERAL, " < "); }    
-                | menor_igual                       {   $$ = newNode(TYPE_LITERAL, " <= "); }    
-                | distinto                          {   $$ = newNode(TYPE_LITERAL, " != "); }     
-                ;             
+COMPARADOR      : igual                             {   $$ = newNode(TYPE_LITERAL, " == "); }
+                | mayor                             {   $$ = newNode(TYPE_LITERAL, " > "); }
+                | mayor_igual                       {   $$ = newNode(TYPE_LITERAL, " >= "); }
+                | menor                             {   $$ = newNode(TYPE_LITERAL, " < "); }
+                | menor_igual                       {   $$ = newNode(TYPE_LITERAL, " <= "); }
+                | distinto                          {   $$ = newNode(TYPE_LITERAL, " != "); }
+                ;
 
 %%
 
 void yyerror(char * s){
     fprintf(stderr, "Error en la linea %d: %s\n", lineCount, s);
-    
+
     freeResources();
 
     if(remove(TMP_FILE_NAME)) {
         printf ("Error al eliminar el archivo de código intermedio.\n");
         exit(1);
     }
-
 	exit(1);
 }
 

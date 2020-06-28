@@ -1,4 +1,4 @@
-/* 
+/*
 ** En este ejemplo se pone a prueba el uso de scopes
 ** mediante funciones y bloques anidados.
 */
@@ -7,6 +7,8 @@
 Se definen las siguientes variables globales:
 
 J es un entero que vale 100.
+L es una lista de entero
+Agregar 1 a L
 
 /* Prototipos */
 Se definen las siguientes funciones:

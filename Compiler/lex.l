@@ -47,6 +47,7 @@ newline         [\n]
 "-"                 {return resta;}
 "*"                 {return mult;}
 "/"                 {return divis;}
+"%"                 {return mod;}
 "Si"                {return si;}
 ":"                 {return dos_puntos;}
 "Fin"               {return fin;}
@@ -76,6 +77,9 @@ newline         [\n]
 "Devolver "           {return devolver;}
 "Recibe"           {return recibe;}
 "Leer un caracter del teclado y guardarlo en "           {return leer_en;}
+"una lista de enteros"      {return t_lista_enteros;}
+"Agregar"                   {return agregar;}
+"a"                         {return a;}
 
 -?{digit}+                      {   char * str = malloc(strlen(yytext)+1);
 			                        strcpy(str, yytext);
@@ -86,6 +90,10 @@ newline         [\n]
 			                        strcpy(str,yytext);
 			                        yylval.value = str;
 			                        return var_id; }
+({digit}*)                          { char * str = malloc(strlen(yytext) + 1);
+                                    strcpy(str, yytext)};
+                                    yylval.value = str;
+                                    return valores; }
 
 .                               {   yyerror("Caracter invalido\n"); }
 

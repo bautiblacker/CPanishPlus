@@ -1,0 +1,8 @@
+
+Principal es una funcion que devuelve un entero:
+    Mostrar "¡Bienvenido al ejemplo de Listas!\n".
+    Mostrar "La idea de este ejemplo es mostrar el funcionamiento de las listas\n"
+    LIST1 es una lista de enteros.
+    Mostrar "Creamos una lista que se llama LISTA1, le vamos a agregar los valores 1,2,3 y 4"
+Fin.
+.

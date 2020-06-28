@@ -3,8 +3,7 @@
 
 extern FILE * tmpFile;
 
-Node * newNode(type type, char * value)
-{
+Node * newNode(type type, char * value) {
 	Node * node = malloc(sizeof(Node));
 	node->type = type;
 	node->value = value;
