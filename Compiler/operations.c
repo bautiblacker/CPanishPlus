@@ -96,7 +96,7 @@ Node * moduleExpressions(Node * n1,  Node * n2) {
     Node * ret;
 
     if (n1->type == TYPE_INT && n2->type == TYPE_INT) {
-        ret = intOperation(n1, n2, MOD);
+        ret = numberOperation(n1, n2, MOD);
     } else {
         yyerror("Resta entre tipos incompatibles.\n");
     }
@@ -162,10 +162,10 @@ Node * exponentExpressions(Node * n1, Node * n2) {
         if(loop == 0) ret->value = "1";
         else if(loop == 1) ret->value = n1->value;
         else if (loop > 1){
-          ret = intOperation(n1, n1, MULT);
+          ret = numberOperation(n1, n1, MULT);
           loop--;
-          for(loop; loop > 1; loop--){
-            ret = intOperation(ret, n1, MULT);
+          for(; loop > 1; loop--){
+            ret = numberOperation(ret, n1, MULT);
           }}
     } else {
         yyerror("Potencia entre tipos incompatibles.\n");

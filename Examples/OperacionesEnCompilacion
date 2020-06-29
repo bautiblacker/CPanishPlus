@@ -22,15 +22,9 @@ Principal es una funcion que devuelve un entero:
     Mostrar var2.
     
     Mostrar "Var3:\n".
-    var3 es un doble que vale -0.2.
+    var3 es un entero que vale 0.
     Repetir mientras var3 sea menor a 4:
-        Mostrar var3 + "\n".
+        Mostrar "Prueba\n".
         Incrementar var3.
     Fin.
-
-    Mostrar "Var4:\n".
-    var4a es un doble que vale 2.4.
-    var4b es un doble que vale 3.3.
-    var4c es un doble que vale var4a * var4b.
-    Mostrar var4c + "\n".
 Fin.
