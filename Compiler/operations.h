@@ -110,7 +110,7 @@ static char * removeFromListL = "l_node * removeFromList(char * value, l_node * 
 
                                     "\tif(aux == NULL) {\n"
                                         "\t\tprintf(\"Elemento no pertenece a la coleccion\\n\");\n"
-                                        "\t\treturn NULL;\n"
+                                        "\t\treturn first;\n"
                                     "\t}\n"
 
                                     "\tprev->next = aux->next;\n"
