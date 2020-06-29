@@ -5,9 +5,15 @@
 #include <stdlib.h>
 #include "list.h"
 
-char * peek(l_node * q);
-char * push(l_node * q);
-char * pop(l_node * q);
+typedef struct sNode {
+    l_node * first;
+    int size;
+} s_node;
+
+
+int peekStack(l_node * q);
+int pushStack(l_node * q);
+int popStack(l_node * q);
 
 
 #endif

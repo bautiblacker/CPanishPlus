@@ -1,14 +1,14 @@
-#include "queue.h"
+#include "stack.h"
 
-char * peek(l_node * first) {
-    if(first != NULL) {
-        return first->value;
+int peekStack(s_node * stack) {
+    if(stack != NULL && stack->first != NULL) {
+        return stack->first->value;
     }
 
     return NULL;
 }
 
-void push(char * value, l_node * first) {
+int pushStack(char * value, s_node * first) {
     l_node * newNode = newListNode(value);
     if(first == NULL) {
         first = newNode;
@@ -20,7 +20,7 @@ void push(char * value, l_node * first) {
     first = newNode;
 }
 
-char * pop(l_node * first) {
+int popStack(l_node * first) {
     if(first == NULL) {
         return NULL;
     }
