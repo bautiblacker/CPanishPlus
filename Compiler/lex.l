@@ -81,6 +81,8 @@ newline         [\n]
 "a " {return a;}
 "Borrar " {return borrar;}
 "de " {return de;}
+"esta presente" {return presente;}
+"Sino" {return sino;}
 
 -?{digit}+                      {   char * str = malloc(strlen(yytext)+1);
 			                        strcpy(str, yytext);

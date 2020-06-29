@@ -85,7 +85,9 @@
      obtener = 301,
      cadena = 302,
      entero = 303,
-     var_id = 304
+     var_id = 304,
+     presente = 305,
+     sino = 306
    };
 #endif
 /* Tokens.  */
@@ -136,6 +138,8 @@
 #define cadena 302
 #define entero 303
 #define var_id 304
+#define presente 305
+#define sino 306
 
 
 
@@ -148,7 +152,7 @@ typedef union YYSTYPE
 	char * value;
 }
 /* Line 1529 of yacc.c.  */
-#line 152 "y.tab.h"
+#line 156 "y.tab.h"
 	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1

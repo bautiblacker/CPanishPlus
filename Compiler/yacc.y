@@ -20,11 +20,11 @@
 %token principal recibe coma es t_cadena t_entero t_mapa asignar reasignar punto par_abrir par_cerrar suma resta mult divis mostrar 
 si fin y o protot igual mayor mayor_igual menor menor_igual distinto repetir_mientras incrementar decrementar es_funcion devuelve 
 devolver evaluada_en dos_puntos prototipo_funciones variables_globales leer_en agregar a borrar de obtener
-%token<value> cadena entero var_id
+%token<value> cadena entero var_id presente sino
 %type<node> PROGRAMA PRINCIPAL LISTA_PARAMETROS PARAMETROS PARAMETRO LINEA LINEAS INSTRUCCION DECLARACION ASIGNACION REASIGNACION 
 TIPO TIPO_F EXPRESION OPERACION FUNCION_BUILTIN MOSTRAR BLOQUE CONDICIONAL COMPARADOR EVALUACION REPETIR INCREMENTACION DECREMENTACION 
 FUNCION FUNCIONES FIN DEVOLVER NUEVO_ALCANCE ARGUMENTOS EVALUAR_FUNC PROTOTIPO PROTOTIPOS LISTA_VAR LISTA_PROTO VARIABLE VARIABLES LEER_CHAR
-AGREGAR OBTENER BORRAR
+AGREGAR OBTENER BORRAR TIPO_STRUCT SINO
 %start PROGRAMA
 
 /* Precedencia */
@@ -146,6 +146,7 @@ LINEA           : INSTRUCCION punto                 {   $$ = newNode(TYPE_EMPTY,
 
 BLOQUE          : CONDICIONAL                       {   $$ = $1; }
                 | REPETIR                           {   $$ = $1; }
+                | SINO                              {   $$ = $1; }
                 ;
 
 INSTRUCCION     : REASIGNACION                      {   $$ = $1; }
@@ -188,6 +189,15 @@ DECLARACION     : var_id TIPO ASIGNACION            {   if (isInCurrentScope($1)
                                                         append($$, $2);
                                                         append($$, newNode(TYPE_LITERAL, $1));
                                                         append($$, $3); }
+                | var_id TIPO_STRUCT                {   if (isInCurrentScope($1) == 1)
+                                                            yyerror("Variable ya declarada previamente\n");
+                                                        if (addVar($1, $2->type) == -1)
+                                                            yyerror("Se superó el límite de variables\n");
+                                                        $$ = newNode(TYPE_EMPTY, NULL);
+                                                        append($$, $2);
+                                                        append($$, newNode(TYPE_LITERAL, $1));
+                                                        append($$, newNode(TYPE_LITERAL, " = "));
+                                                        append($$, newNode(TYPE_LITERAL, "malloc(sizeof(MapNode))")); }
                 ;
 
 ASIGNACION      :                                   {   $$ = NULL; }
@@ -209,8 +219,9 @@ REASIGNACION    : var_id reasignar EXPRESION        {   int type = getType($1);
 
 TIPO            : es t_cadena                       {   $$ = newNode(TYPE_STRING, "char * "); }
                 | es t_entero                       {   $$ = newNode(TYPE_INT, "int "); }
-                | es t_mapa                         {   $$ = newNode(TYPE_MAP, "MapNode * "); }
                 ;
+
+TIPO_STRUCT     : es t_mapa                         {   $$ = newNode(TYPE_MAP, "MapNode * "); }
 
 TIPO_F          : t_cadena                          {   $$ = newNode(TYPE_STRING, "char * "); }
                 | t_entero                          {   $$ = newNode(TYPE_INT, "int "); }
@@ -242,6 +253,9 @@ EXPRESION       : cadena                            {   $$ = newNode(TYPE_STRING
                                                             append($$, $2);
                                                             append($$, newNode(TYPE_LITERAL, ")")); 
                                                         } }
+                | EXPRESION presente                {   $$ = newNode(TYPE_EMPTY, NULL);
+                                                        append($$, $1);
+                                                        append($$, newNode(TYPE_LITERAL, " != NULL"));  }
                 ;
 
 OPERACION       : EXPRESION suma EXPRESION          {   $$ = addExpressions($1, $3); }
@@ -299,6 +313,11 @@ CONDICIONAL     : si EVALUACION dos_puntos LINEAS FIN               {   $$ = new
                                                                         append($$, $4); 
                                                                         append($$, newNode(TYPE_LITERAL, "}\n")); }
                 ;
+
+SINO            : sino dos_puntos LINEAS FIN                        {   $$ = newNode(TYPE_EMPTY, NULL); 
+                                                                        append($$, newNode(TYPE_LITERAL, "else {\n")); 
+                                                                        append($$, $3); 
+                                                                        append($$, newNode(TYPE_LITERAL, "}\n")); }
 
 REPETIR         : repetir_mientras EVALUACION dos_puntos LINEAS FIN {   $$ = newNode(TYPE_EMPTY, NULL); 
                                                                         append($$, newNode(TYPE_LITERAL, "while(")); 
@@ -377,7 +396,21 @@ OBTENER         : var_id de var_id                              {   int type = g
                                                                     append($$, newNode(TYPE_LITERAL, $1));
                                                                     append($$, newNode(TYPE_LITERAL, ")")); }
 
-BORRAR          : borrar var_id de var_id              {}
+BORRAR          : borrar var_id de var_id                       {   int type = getType($4);
+                                                                    if (type == -1)
+                                                                        yyerror("Variable no declarada previamente\n");
+                                                                    if (type != TYPE_MAP) {
+                                                                        yyerror("Asignación entre tipos incompatibles\n");
+                                                                    }
+
+                                                                    $$ = newNode(TYPE_EMPTY, NULL);
+                                                                    append($$, newNode(TYPE_LITERAL, $4)); 
+                                                                    append($$, newNode(TYPE_LITERAL, " = "));
+                                                                    append($$, newNode(TYPE_LITERAL, "removeKey(")); 
+                                                                    append($$, newNode(TYPE_LITERAL, $4)); 
+                                                                    append($$, newNode(TYPE_LITERAL, ","));
+                                                                    append($$, newNode(TYPE_LITERAL, $2));
+                                                                    append($$, newNode(TYPE_LITERAL, ")")); }
 
 %%
 
@@ -404,8 +437,11 @@ void printHeaders() {
     fprintf(tmpFile, "%s" , strIntMultFunction);
     fprintf(tmpFile, "%s" , getCharToVar);
     fprintf(tmpFile, "%s" , mapStructure);
+    fprintf(tmpFile, "%s" , emptyMapNode);
+    fprintf(tmpFile, "%s" , emptyMap);
     fprintf(tmpFile, "%s" , searchMapNode);
     fprintf(tmpFile, "%s" , newMapNode);
     fprintf(tmpFile, "%s" , getMapNode);
     fprintf(tmpFile, "%s" , addMapNode);
+    fprintf(tmpFile, "%s" , removeMapNode);
 }
