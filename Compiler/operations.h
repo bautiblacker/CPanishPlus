@@ -295,8 +295,47 @@ static char * removeMapNode = "MapNode * removeKey(MapNode * map, char * key) {\
                                     "\tcurrent->value = NULL;\n"
                                     "\treturn map;\n"
                                 "}\n";
+
+static char * stackNode = "typedef struct sNode {\n"
+                                "char * value;\n"
+                                "struct sNode * next;\n"
+                                "struct sNode * prev;\n"
+                            "} s_node;\n";
+
+static char * stackMotherNode = "typedef struct sMNode {\n"
+                                    "\ts_node * first;\n"
+                                    "\tint size;\n"
+                                "} sm_node;\n";
+
+static char * newStackNode = "static s_node * newStackNode(char * value) {\n"
+                                "s_node * node = (s_node *)malloc(sizeof(s_node));\n"
+                                "node->value = value;\n"
+                                "node->next = NULL;\n"
+                                "node->prev = NULL;\n"
+                                "return node;\n"
+                            "}\n";
                                 
+static char * pushStack = "void push(char * value, sm_node * stack) {\n"
+                                "\ts_node * newNode = newStackNode(value);\n"
+                                "\tif(stack->first == NULL) {\n"
+                                    "\t\tstack->first = newNode;\n"
+                                    "\t\treturn;\n"
+                                "\t}\n"
+                                "\tnewNode->next = stack->first;\n"
+                                "\tstack->first->prev = newNode;\n"
+                                "\tstack->first = newNode;\n"
+                            "}\n";
                             
+static char * printStack = "void printStack(sm_node * stack) {\n"
+                                "\tif (stack->first == NULL) printf(\"Stack vacio\\n\");\n"
+                                "\ts_node * current = stack->first;\n"
+                                "\twhile (current != NULL) {\n"
+                                    "\t\tprintf(\"[\t\t%s\t\t]\\n\", current->value);\n"
+                                    "\t\tcurrent = current->next;\n"
+                                "\t}\n"
+                            "}\n";
+
+static char * popStack = "";
                                                 
 
 Node * addExpressions(Node * n1, Node * n2);

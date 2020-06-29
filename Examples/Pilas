@@ -1,0 +1,74 @@
+Principal es una funcion que devuelve un entero:
+    Mostrar "¡Bienvenido al ejemplo de Pilas!\n".
+    Mostrar "La idea de este ejemplo es mostrar el funcionamiento de las pilas\n".
+    Mostrar "Creamos una pila que se llama PILA1 que contendrá enteros\n".
+    Mostrar "Ahora vamos a agregarle valores a la pila y para eso escriba cada valor seguido por un salto de linea\nUna vez que no quiera agregar mas valores, escriba: Listo!\n".
+
+    PILA1 es una pila de enteros.
+    
+    CARACTER es una cadena que vale "".
+    INPUT es una cadena que vale "".
+
+    Repetir mientras INPUT sea distinto a "Listo!":
+        CARACTER ahora vale "".
+        Si INPUT es distinto a "":
+            Agregar INPUT a PILA1.
+            Mostrar "Pila: \n".
+            Mostrar PILA1.
+            Mostrar "\n".
+        Fin.
+
+        INPUT ahora vale "".
+        Mostrar "Agregar valor: ".
+
+        Repetir mientras CARACTER sea distinto a "\n":
+            Leer un caracter del teclado y guardarlo en CARACTER.
+
+            Si CARACTER es distinto a "\n":
+                INPUT ahora vale INPUT + CARACTER.
+            Fin.
+        Fin.
+    Fin.
+
+    CARACTER ahora vale "".
+    INPUT ahora vale "".
+    B es una cadena que vale "".
+    P es una cadena que vale "".
+
+    Mostrar "Ahora vamos a interactuar con la pila\n".
+    Mostrar "*  Para sacar el primer elemento, presione b\n".
+    Mostrar "*  Para saber cual es el primer elemento de la pila escribir p\n".
+    Mostrar "Escriba Listo! para finalizar\n".
+
+    Repetir mientras INPUT sea distinto a "Listo!":
+        Si CARACTER es igual a "\n":
+            Si B es igual a "b":
+                Sacar el primer elemento de PILA1.
+                Mostrar PILA1.
+            Fin.
+            Si P es igual a "p":
+                Ojeada a PILA1.
+            Fin.
+        Fin.
+
+        INPUT ahora vale "".
+        CARACTER ahora vale "".
+        Repetir mientras CARACTER sea distinto a "\n":
+            Si CARACTER es igual a "b":
+                B ahora vale "b".
+            Fin.
+            Sino:
+                B ahora vale "".
+            Fin.
+
+            Si CARACTER es igual a "p":
+                P ahora vale "p".
+            Fin.
+            Sino:
+                P ahora vale "".
+            Fin.
+            Leer un caracter del teclado y guardarlo en CARACTER.
+            INPUT ahora vale INPUT + CARACTER.
+        Fin.
+    Fin.
+Fin.

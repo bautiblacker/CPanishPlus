@@ -1,9 +1,12 @@
-#ifndef QUEUE_H
-#define QUEUE_H
+#ifndef STACK_H
+#define STACK_H
 
-#include <stdio.h>
-#include <stdlib.h>
 #include "list.h"
+
+typedef struct sNode {
+    l_node * first;
+    int size;
+} s_node;
 
 char * peek(l_node * q);
 char * push(l_node * q);

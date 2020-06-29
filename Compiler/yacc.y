@@ -207,6 +207,8 @@ DECLARACION     : var_id TIPO ASIGNACION            {   if (isInCurrentScope($1)
                                                             append($$, newNode(TYPE_LITERAL, "q_node))"));
                                                         } else if($2->type == TYPE_MAP) {
                                                             append($$, newNode(TYPE_LITERAL, "MapNode))"));
+                                                        } else if($2->type == TYPE_STACK) {
+                                                            append($$, newNode(TYPE_LITERAL, "sm_node))"));
                                                         }
                                                     };
                 ;
@@ -219,7 +221,7 @@ ASIGNACION      :                                   {   $$ = NULL; }
 AGREGAR         : agregar EXPRESION a var_id       {   int type = getType($4);
                                                             if (type == -1)
                                                                 yyerror("Variable no declarada previamente\n");
-                                                            if (type != TYPE_LIST && type != TYPE_QUEUE)
+                                                            if (type != TYPE_LIST && type != TYPE_QUEUE && type != TYPE_STACK)
                                                                 yyerror("Asignación entre tipos incompatibles\n");
 
                                                             $$ = newNode(TYPE_EMPTY, NULL);
@@ -227,6 +229,8 @@ AGREGAR         : agregar EXPRESION a var_id       {   int type = getType($4);
                                                                 append($$, newNode(TYPE_LITERAL, "addListNode("));
                                                             else if(type == TYPE_QUEUE)
                                                                 append($$, newNode(TYPE_LITERAL, "queueOffer("));
+                                                            else if(type == TYPE_STACK)
+                                                                append($$, newNode(TYPE_LITERAL, "push("));
                                                             append($$, $2);
                                                             append($$, newNode(TYPE_LITERAL, ","));
                                                             append($$, newNode(TYPE_LITERAL, $4));
@@ -307,8 +311,8 @@ TIPO            : es t_cadena                       {   $$ = newNode(TYPE_STRING
                 ;
 TIPO_STRUCT     : es t_lista_enteros                {   $$ = newNode(TYPE_LIST, "l_node * "); };
                 | es t_queue                        {   $$ = newNode(TYPE_QUEUE, "q_node * ");};
-
-TIPO_STRUCT     : es t_mapa                         {   $$ = newNode(TYPE_MAP, "MapNode * "); }
+                | es t_stack                        {   $$ = newNode(TYPE_STACK, "sm_node * ");};
+                | es t_mapa                         {   $$ = newNode(TYPE_MAP, "MapNode * "); }
 
 TIPO_F          : t_cadena                          {   $$ = newNode(TYPE_STRING, "char * "); }
                 | t_entero                          {   $$ = newNode(TYPE_INT, "int "); }
@@ -399,6 +403,8 @@ MOSTRAR         : mostrar EXPRESION                 {   $$ = newNode(TYPE_EMPTY,
                                                             append($$, newNode(TYPE_LITERAL, "printList("));
                                                         else if ($2->type == TYPE_QUEUE)
                                                             append($$, newNode(TYPE_LITERAL, "printQueue("));
+                                                        else if ($2->type == TYPE_STACK)
+                                                            append($$, newNode(TYPE_LITERAL, "printStack("));
                                                         append($$, $2);
                                                         append($$, newNode(TYPE_LITERAL, ")")); }
                 ;
@@ -546,4 +552,10 @@ void printHeaders() {
     fprintf(tmpFile, "%s" , getMapNode);
     fprintf(tmpFile, "%s" , addMapNode);
     fprintf(tmpFile, "%s" , removeMapNode);
+
+    fprintf(tmpFile, "%s" , stackNode);
+    fprintf(tmpFile, "%s" , stackMotherNode);
+    fprintf(tmpFile, "%s" , newStackNode);
+    fprintf(tmpFile, "%s" , pushStack);
+    fprintf(tmpFile, "%s" , printStack);
 }
