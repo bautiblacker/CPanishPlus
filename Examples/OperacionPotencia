@@ -15,7 +15,7 @@ Principal es una funcion que devuelve un entero:
     prueba es una cadena que vale "Prueba".
 
     Mostrar "Var1:\n".
-    var1 es una cadena que vale (3 ^ (13 - 10)) * "Prueba\n".
+    var1 es una cadena que vale (3 ^ (10 - 10)) * "Prueba\n".
     Mostrar var1.
 
     Mostrar "Var2:\n".
