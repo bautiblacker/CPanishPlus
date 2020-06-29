@@ -47,7 +47,7 @@ Principal es una funcion que devuelve un entero:
     B es una cadena que vale "".
     P es una cadena que vale "".
 
-    Mostrar "Ahora vamos a interactuar con la lista\n".
+    Mostrar "Ahora vamos a interactuar con la cola\n".
     Mostrar "*  Para borrar un elemento presiona b y el numero que quisiera borrar, por ejemplo b4 eliminaria el numero 4 de la lista\n".
     Mostrar "*  Para saber cual es el primer elemento de la cola escribir p\n".
     Mostrar "Escriba Listo! para finalizar\n".
