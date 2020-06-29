@@ -38,7 +38,9 @@ newline         [\n]
 "una cadena"     {return t_cadena;}
 "una lista de enteros"      {return t_lista_enteros;}
 "es un stack de enteros"    {return t_stack;}
-"es "            {return es;}
+"una cola de enteros"    {return t_queue;}
+"Ojeada"            {return peek;}
+"es "               {return es;}
 "que vale"          {return asignar;}
 "ahora vale"        {return reasignar;}
 "Mostrar"           {return mostrar; }

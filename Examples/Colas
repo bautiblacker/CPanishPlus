@@ -1,0 +1,94 @@
+/* Prototipos */
+Se definen las siguientes funciones:
+
+ValidarCaracter es una funcion que devuelve un entero.
+Recibe: una cadena c.
+
+Principal es una funcion que devuelve un entero:
+    Mostrar "¡Bienvenido al ejemplo de Colas!\n".
+    Mostrar "La idea de este ejemplo es mostrar el funcionamiento de las colas\n".
+    Mostrar "Creamos una cola que se llama COLA1 que contendrá enteros\n".
+    Mostrar "Ahora vamos a agregarle valores a la cola y para eso escriba cada valor seguido por un salto de linea\nUna vez que no quiera agregar mas valores, escriba: Listo!\n".
+
+    COLA1 es una cola de enteros.
+
+    CARACTER es una cadena que vale "\n".
+    INPUT es una cadena que vale "".
+    NUMERO es una cadena que vale "".
+    IsValid es un entero que vale 0.
+
+    Repetir mientras INPUT sea distinto a "Listo!\n":
+        Si CARACTER es igual a "\n":
+            Mostrar "Agregar valor: ".
+        Fin.
+        Leer un caracter del teclado y guardarlo en CARACTER.
+        INPUT ahora vale INPUT + CARACTER.
+        IsValid ahora vale (ValidarCaracter evaluada en CARACTER).
+        Si IsValid es igual a 1:
+            NUMERO ahora vale NUMERO + CARACTER.
+        Fin.
+
+        Si CARACTER es igual a "\n" y NUMERO es distinto a "":
+            Agregar NUMERO a COLA1.
+            NUMERO ahora vale "".
+            INPUT ahora vale "".
+        Fin.
+    Fin.
+
+    Mostrar "Cola:\n".
+    Mostrar COLA1.
+    Mostrar "\n".
+    INPUT ahora vale "".
+    CARACTER ahora vale "".
+    NUMERO ahora vale "".
+    B es una cadena que vale "".
+    P es una cadena que vale "".
+
+    Mostrar "Ahora vamos a interactuar con la lista\n".
+    Mostrar "*  Para borrar un elemento presiona b y el numero que quisiera borrar, por ejemplo b4 eliminaria el numero 4 de la lista\n".
+    Mostrar "*  Para saber cual es el primer elemento de la cola escribir p\n".
+    Mostrar "Escriba Listo! para finalizar\n".
+
+    Repetir mientras INPUT sea distinto a "Listo!\n":
+        INPUT ahora vale "".
+        Leer un caracter del teclado y guardarlo en CARACTER.
+        IsValid ahora vale (ValidarCaracter evaluada en CARACTER).
+        Si IsValid es igual a 1:
+            NUMERO ahora vale NUMERO + CARACTER.
+        Fin.
+
+        Si CARACTER es igual a "b":
+            B ahora vale "b".
+        Fin.
+
+        Si CARACTER es igual a "p":
+            P ahora vale "p".
+        Fin.
+
+        Si CARACTER es igual a "\n" y B es igual a "b":
+            Borrar NUMERO de COLA1.
+            NUMERO ahora vale "".
+            Mostrar COLA1.
+            B ahora vale "".
+            INPUT ahora vale "".
+        Fin.
+
+        Si P es igual a "p" y CARACTER es igual a "\n":
+            PEEK es un entero que vale (Ojeada a COLA1).
+            Mostrar "El primer elemento es: " + PEEK + "\n".
+            P ahora vale "".
+            INPUT ahora vale "".
+        Fin.
+
+        INPUT ahora vale INPUT + CARACTER.
+    Fin.
+Fin.
+
+
+ValidarCaracter es una funcion que devuelve un entero.
+Recibe: una cadena c:
+    Si c es igual a "1" o c es igual a "2" o c es igual a "3" o c es igual a "4" o c es igual a "5" o c es igual a "6" o c es igual a "7" o c es igual a "8" o c es igual a "9" o c es igual a "0":
+        Devolver 1.
+    Fin.
+    Devolver 0.
+Fin.

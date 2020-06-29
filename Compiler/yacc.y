@@ -17,14 +17,14 @@
 }
 
 /* Tokens */
-%token principal recibe coma es t_cadena t_entero t_lista_enteros t_stack asignar reasignar punto par_abrir par_cerrar suma resta mult divis mod mostrar
+%token principal recibe coma es t_cadena t_entero t_lista_enteros t_stack t_queue asignar reasignar punto par_abrir par_cerrar suma resta mult divis mod mostrar
 mostrar_r si fin y o protot igual mayor mayor_igual menor menor_igual distinto repetir_mientras incrementar decrementar es_funcion devuelve
-devolver evaluada_en dos_puntos prototipo_funciones variables_globales leer_en agregar borrar a de
-%token<value> cadena entero lista stack var_id
+devolver evaluada_en dos_puntos prototipo_funciones variables_globales leer_en agregar borrar a de peek
+%token<value> cadena entero lista cola stack var_id
 %type<node> PROGRAMA PRINCIPAL LISTA_PARAMETROS PARAMETROS PARAMETRO LINEA LINEAS INSTRUCCION DECLARACION ASIGNACION REASIGNACION
 TIPO TIPO_F EXPRESION OPERACION FUNCION_BUILTIN MOSTRAR BLOQUE CONDICIONAL COMPARADOR EVALUACION REPETIR INCREMENTACION DECREMENTACION
 FUNCION FUNCIONES FIN DEVOLVER NUEVO_ALCANCE ARGUMENTOS EVALUAR_FUNC PROTOTIPO PROTOTIPOS LISTA_VAR LISTA_PROTO VARIABLE VARIABLES LEER_CHAR AGREGAR TIPO_STRUCT
-BORRAR MOSTRAR_R
+BORRAR MOSTRAR_R OJEADA
 %start PROGRAMA
 
 /* Precedencia */
@@ -157,6 +157,7 @@ INSTRUCCION     : REASIGNACION                      {   $$ = $1; }
                 | EXPRESION                         {   $$ = $1; }
                 | AGREGAR                           {   $$ = $1; }
                 | BORRAR                            {   $$ = $1; }
+                | OJEADA                            {   $$ = $1; }
                 ;
 
 
@@ -194,9 +195,11 @@ DECLARACION     : var_id TIPO ASIGNACION            {   if (isInCurrentScope($1)
                                                         append($$, $2);
                                                         append($$, newNode(TYPE_LITERAL, $1));
                                                         append($$, newNode(TYPE_LITERAL, " = "));
+                                                        append($$, newNode(TYPE_LITERAL, "malloc(sizeof("));
                                                         if($2->type == TYPE_LIST) {
-                                                            append($$, newNode(TYPE_LITERAL, "malloc(sizeof(l_node))"));
-                                                        }
+                                                            append($$, newNode(TYPE_LITERAL, "l_node))"));
+                                                        } else if($2->type == TYPE_QUEUE)
+                                                            append($$, newNode(TYPE_LITERAL, "q_node))"));
                                                     };
                 ;
 
@@ -208,11 +211,14 @@ ASIGNACION      :                                   {   $$ = NULL; }
 AGREGAR         : agregar EXPRESION a var_id       {   int type = getType($4);
                                                             if (type == -1)
                                                                 yyerror("Variable no declarada previamente\n");
-                                                            if (type != TYPE_LIST)
+                                                            if (type != TYPE_LIST && type != TYPE_QUEUE)
                                                                 yyerror("Asignación entre tipos incompatibles\n");
 
                                                             $$ = newNode(TYPE_EMPTY, NULL);
-                                                            append($$, newNode(TYPE_LITERAL, "addListNode("));
+                                                            if(type == TYPE_LIST)
+                                                                append($$, newNode(TYPE_LITERAL, "addListNode("));
+                                                            else if(type == TYPE_QUEUE)
+                                                                append($$, newNode(TYPE_LITERAL, "queueOffer("));
                                                             append($$, $2);
                                                             append($$, newNode(TYPE_LITERAL, ","));
                                                             append($$, newNode(TYPE_LITERAL, $4));
@@ -221,16 +227,36 @@ AGREGAR         : agregar EXPRESION a var_id       {   int type = getType($4);
 BORRAR          :  borrar EXPRESION de var_id        {   int type = getType($4);
                                                             if(type == -1)
                                                                 yyerror("Variable no declarada previamente\n");
-                                                            if (type != TYPE_LIST)
+                                                            if (type != TYPE_LIST && type != TYPE_QUEUE)
                                                                 yyerror("Asignación entre tipos incompatibles\n");
 
                                                             $$ = newNode(TYPE_EMPTY, NULL);
-                                                            append($$, newNode(TYPE_LITERAL, "removeFromList("));
+                                                            if(type == TYPE_QUEUE) {
+                                                                append($$, newNode(TYPE_LITERAL, "removeFromQueue("));
+                                                            }
+                                                            if(type == TYPE_LIST) {
+                                                                append($$, newNode(TYPE_LITERAL, "removeFromList("));
+                                                            }
+
                                                             append($$, $2);
                                                             append($$, newNode(TYPE_LITERAL, ","));
                                                             append($$, newNode(TYPE_LITERAL, $4));
                                                             append($$, newNode(TYPE_LITERAL, ")"));
                                                     };
+OJEADA              : peek a var_id               {int type = getType($3);
+                                                        if(type == -1) {
+                                                            yyerror("Variable no declarada previamente\n");
+                                                        }
+                                                        if (type != TYPE_QUEUE) {
+                                                            yyerror("Operacion sobre tipo incompatible\n");
+                                                        }
+
+                                                        $$ = newNode(TYPE_EMPTY, NULL);
+                                                        append($$, newNode(TYPE_LITERAL, "peekQueue("));
+                                                        append($$, newNode(TYPE_LITERAL, $3));
+                                                        append($$, newNode(TYPE_LITERAL, ")"));
+                                                    }
+                ;
 REASIGNACION    : var_id reasignar EXPRESION        {   int type = getType($1);
                                                         if (type == -1)
                                                             yyerror("Variable o funcion no declarada previamente\n");
@@ -246,6 +272,7 @@ TIPO            : es t_cadena                       {   $$ = newNode(TYPE_STRING
                 | es t_entero                       {   $$ = newNode(TYPE_INT, "int "); }
                 ;
 TIPO_STRUCT     : es t_lista_enteros                {   $$ = newNode(TYPE_LIST, "l_node * "); };
+                | es t_queue                        {   $$ = newNode(TYPE_QUEUE, "q_node * ");};
 
 TIPO_F          : t_cadena                          {   $$ = newNode(TYPE_STRING, "char * "); }
                 | t_entero                          {   $$ = newNode(TYPE_INT, "int "); }
@@ -262,6 +289,14 @@ EXPRESION       : cadena                            {   $$ = newNode(TYPE_STRING
                                                             $$ = $2;
                                                         } else  {
                                                             $$ = newNode($2->type, NULL);
+                                                            append($$, newNode(TYPE_LITERAL, "("));
+                                                            append($$, $2);
+                                                            append($$, newNode(TYPE_LITERAL, ")"));
+                                                        } }
+                | par_abrir OJEADA par_cerrar      {   if ($2->value != NULL) {
+                                                            $$ = $2;
+                                                        } else  {
+                                                            $$ = newNode(TYPE_INT, NULL);
                                                             append($$, newNode(TYPE_LITERAL, "("));
                                                             append($$, $2);
                                                             append($$, newNode(TYPE_LITERAL, ")"));
@@ -305,18 +340,19 @@ MOSTRAR         : mostrar EXPRESION                 {   $$ = newNode(TYPE_EMPTY,
                                                             append($$, newNode(TYPE_LITERAL, "printf(\"%s\", "));
                                                         if ($2->type == TYPE_INT)
                                                             append($$, newNode(TYPE_LITERAL, "printf(\"%d\", "));
-                                                        if ($2->type == TYPE_LIST) {
+                                                        else if ($2->type == TYPE_LIST)
                                                             append($$, newNode(TYPE_LITERAL, "printList("));
-                                                        }
+                                                        else if ($2->type == TYPE_QUEUE)
+                                                            append($$, newNode(TYPE_LITERAL, "printQueue("));
                                                         append($$, $2);
                                                         append($$, newNode(TYPE_LITERAL, ")")); }
                 ;
 MOSTRAR_R       : mostrar_r EXPRESION               {   $$ = newNode(TYPE_EMPTY, NULL);
                                                         if ($2->type == TYPE_STRING || $2->type == TYPE_INT)
                                                             yyerror("Operacion no valida para este tipo de variable\n");
-                                                        if ($2->type == TYPE_LIST) {
+                                                        else if ($2->type == TYPE_LIST)
                                                             append($$, newNode(TYPE_LITERAL, "printBackwards("));
-                                                        }
+
                                                         append($$, $2);
                                                         append($$, newNode(TYPE_LITERAL, ")")); };
 LEER_CHAR       : leer_en var_id                    {   int type = getType($2);
@@ -416,5 +452,10 @@ void printHeaders() {
     fprintf(tmpFile, "%s\n", printListL);
     fprintf(tmpFile, "%s\n", removeFromListL);
     fprintf(tmpFile, "%s\n", printBackwards);
+    fprintf(tmpFile, "%s\n", queueStruct);
+    fprintf(tmpFile, "%s\n", queueOffer);
+    fprintf(tmpFile, "%s\n", removeFromQueue);
+    fprintf(tmpFile, "%s\n", printQueue);
+    fprintf(tmpFile, "%s\n", peekQueue);
 
 }
