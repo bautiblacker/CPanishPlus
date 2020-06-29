@@ -1,5 +1,6 @@
 %{
 	#include <stdio.h>
+    #include <stdbool.h>
     #include "node.h"
     #include "operations.h"    
     #include "compiler.h"
@@ -17,10 +18,10 @@
 }
 
 /* Tokens */
-%token principal recibe coma es t_cadena t_entero asignar reasignar punto par_abrir par_cerrar suma resta mult divis mostrar 
+%token principal recibe coma es t_cadena t_entero t_doble t_booleano asignar reasignar punto par_abrir par_cerrar suma resta mult divis mostrar 
 si fin y o protot igual mayor mayor_igual menor menor_igual distinto repetir_mientras incrementar decrementar es_funcion devuelve 
 devolver evaluada_en dos_puntos prototipo_funciones variables_globales leer_en
-%token<value> cadena entero var_id
+%token<value> cadena entero doble booleano var_id 
 %type<node> PROGRAMA PRINCIPAL LISTA_PARAMETROS PARAMETROS PARAMETRO LINEA LINEAS INSTRUCCION DECLARACION ASIGNACION REASIGNACION 
 TIPO TIPO_F EXPRESION OPERACION FUNCION_BUILTIN MOSTRAR BLOQUE CONDICIONAL COMPARADOR EVALUACION REPETIR INCREMENTACION DECREMENTACION 
 FUNCION FUNCIONES FIN DEVOLVER NUEVO_ALCANCE ARGUMENTOS EVALUAR_FUNC PROTOTIPO PROTOTIPOS LISTA_VAR LISTA_PROTO VARIABLE VARIABLES LEER_CHAR
@@ -204,14 +205,20 @@ REASIGNACION    : var_id reasignar EXPRESION        {   int type = getType($1);
 
 TIPO            : es t_cadena                       {   $$ = newNode(TYPE_STRING, "char * "); }
                 | es t_entero                       {   $$ = newNode(TYPE_INT, "int "); }
+                | es t_doble                        {   $$ = newNode(TYPE_DOUBLE, "double "); }
+                | es t_booleano                     {   $$ = newNode(TYPE_BOOL, "bool "); }
                 ;
 
 TIPO_F          : t_cadena                          {   $$ = newNode(TYPE_STRING, "char * "); }
                 | t_entero                          {   $$ = newNode(TYPE_INT, "int "); }
+                | t_doble                           {   $$ = newNode(TYPE_DOUBLE, "double "); }
+                | t_booleano                        {   $$ = newNode(TYPE_BOOL, "bool "); }
                 ;
 
 EXPRESION       : cadena                            {   $$ = newNode(TYPE_STRING, $1); }
                 | entero                            {   $$ = newNode(TYPE_INT, $1); }
+                | doble                             {   $$ = newNode(TYPE_DOUBLE, $1); }
+                | booleano                          {   $$ = newNode(TYPE_BOOL, $1); }
                 | var_id                            {   int type = getType($1);
                                                         if (type == -1)
                                                             yyerror("Variable o funcion no declarada previamente\n");
@@ -259,8 +266,10 @@ FUNCION_BUILTIN : MOSTRAR                           {   $$ = $1; }
 MOSTRAR         : mostrar EXPRESION                 {   $$ = newNode(TYPE_EMPTY, NULL);
                                                         if ($2->type == TYPE_STRING)
                                                             append($$, newNode(TYPE_LITERAL, "printf(\"%s\", "));
-                                                        if ($2->type == TYPE_INT)
+                                                        if ($2->type == TYPE_INT || $2->type == TYPE_BOOL)
                                                             append($$, newNode(TYPE_LITERAL, "printf(\"%d\", "));
+                                                        if($2->type == TYPE_DOUBLE)
+                                                            append($$, newNode(TYPE_LITERAL, "printf(\"%lf\", "));
                                                         append($$, $2); 
                                                         append($$, newNode(TYPE_LITERAL, ")")); }
                 ;
@@ -303,13 +312,18 @@ EVALUACION      : EXPRESION COMPARADOR EXPRESION                    {   $$ = new
                                                                             append($$, newNode(TYPE_LITERAL, ")"));
                                                                             append($$, $2);
                                                                             append($$, newNode(TYPE_LITERAL, "0"));
-                                                                        } else if ($1->type == TYPE_INT && $3->type == TYPE_INT) {
+                                                                        } else if (($1->type == TYPE_INT || $1->type == TYPE_DOUBLE)  && ($3->type == TYPE_INT || $3->type == TYPE_DOUBLE)) {
+                                                                            append($$, $1); 
+                                                                            append($$, $2); 
+                                                                            append($$, $3);
+                                                                        } else if($1->type == TYPE_BOOL && $3->type == TYPE_BOOL){
                                                                             append($$, $1); 
                                                                             append($$, $2); 
                                                                             append($$, $3);
                                                                         } else {
                                                                             yyerror("Comparación entre tipos incompatibles");
-                                                                        } }
+                                                                        } 
+                                                                    }
                 | EVALUACION y EVALUACION                           {   $$ = newNode(TYPE_EMPTY, NULL); 
                                                                         append($$, $1); 
                                                                         append($$, newNode(TYPE_LITERAL, " && "));
@@ -352,9 +366,11 @@ void printHeaders() {
     fprintf(tmpFile, "#include <stdio.h>\n");
     fprintf(tmpFile, "#include <stdlib.h>\n");
     fprintf(tmpFile, "#include <string.h>\n");
+    fprintf(tmpFile, "#include <stdbool.h>\n");
 
     fprintf(tmpFile, "%s" , strCatFunction);
     fprintf(tmpFile, "%s" , strIntCatFunction);
+    fprintf(tmpFile, "%s" , strDoubleCatFunction);
     fprintf(tmpFile, "%s" , strIntMultFunction);
     fprintf(tmpFile, "%s" , getCharToVar);
 }

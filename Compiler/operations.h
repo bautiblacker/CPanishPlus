@@ -19,6 +19,15 @@ static char * strIntCatFunction = "char * _strintconcat(char * str, int num, int
                                 "\treturn newstr;\n"
                             "}\n";
 
+static char * strDoubleCatFunction = "char * _strdoubleconcat(char * str, double num, int sort) {\n"
+                                "\tchar * newstr = malloc(strlen(str) + 20);\n"
+                                "\tif (sort > 0)\n"
+                                "\t\tsprintf(newstr, \"%s%f\", str, num);\n"
+                                "\telse\n"
+                                "\t\tsprintf(newstr, \"%f%s\", num, str);\n"
+                                "\treturn newstr;\n"
+                            "}\n";
+
 static char * strIntMultFunction = "char * _strintmult(char * str, int num) {\n"
                                     "\tint len = strlen(str);\n"
                                     "\tchar * newstr = malloc(len * num + 1);\n"

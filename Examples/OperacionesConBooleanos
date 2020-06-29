@@ -1,0 +1,38 @@
+/* 
+** En este ejemplo se pone a prueba el uso de scopes
+** mediante funciones y bloques anidados.
+*/
+
+/* Variables globales */
+Se definen las siguientes variables globales:
+
+H es un booleano que vale verdadero.
+
+/* Prototipos */
+Se definen las siguientes funciones:
+
+ImprimirCond es una funcion que devuelve un booleano.
+Recibe: un booleano i.
+
+/* Funciones */
+Principal es una funcion que devuelve un entero:
+    Mostrar H + "\n".
+    I es un booleano que vale falso.
+    Si H es igual a verdadero:
+        Mostrar I + "\n".
+    Fin.
+    Si ImprimirCond evaluada en I es igual a verdadero:
+        Mostrar "verdadero\n".
+    Fin.
+    Si ImprimirCond evaluada en I  es igual a falso :
+        Mostrar "falso\n".
+    Fin.
+Fin.
+
+ImprimirCond es una funcion que devuelve un booleano.
+Recibe: un booleano i:
+    Si H es distinto a falso y i es igual a falso:
+        Devolver verdadero.
+    Fin.
+    Devolver falso.
+Fin.

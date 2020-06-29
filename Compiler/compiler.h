@@ -3,6 +3,7 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <stdbool.h>
 
 FILE * tmpFile;
 #define TMP_FILE_NAME ".comp_mid.tmp.c"
