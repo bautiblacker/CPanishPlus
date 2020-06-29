@@ -40,10 +40,15 @@ newline         [\n]
 "un doble"       {return t_doble;}
 "un booleano"    {return t_booleano;}
 "una cadena"     {return t_cadena;}
-"es "            {return es;}
+"una lista de enteros"      {return t_lista_enteros;}
+"es un stack de enteros"    {return t_stack;}
+"una cola de enteros"    {return t_queue;}
+"Ojeada"            {return peek;}
+"es "               {return es;}
 "que vale"          {return asignar;}
 "ahora vale"        {return reasignar;}
 "Mostrar"           {return mostrar; }
+"Mostrar al revez"  {return mostrar_r;}
 "."                 {return punto;}
 "("                 {return par_abrir;}
 ")"                 {return par_cerrar;}
@@ -51,11 +56,14 @@ newline         [\n]
 "-"                 {return resta;}
 "*"                 {return mult;}
 "/"                 {return divis;}
+"%"                 {return mod;}
+"^"                 {return expo;}
 "Si"                {return si;}
 ":"                 {return dos_puntos;}
 "Fin"               {return fin;}
 " y "               {return y;}
 " o "               {return o;}
+" de "              {return de;}
 "es igual a"        {return igual;}
 "es mayor a"        {return mayor;}
 "es mayor o igual a"   {return mayor_igual;}
@@ -80,6 +88,9 @@ newline         [\n]
 "Devolver "           {return devolver;}
 "Recibe"           {return recibe;}
 "Leer un caracter del teclado y guardarlo en "           {return leer_en;}
+"Agregar"                   {return agregar;}
+"Borrar"                    {return borrar;}
+"a"                         {return a;}
 
 -?{digit}+                      {   char * str = malloc(strlen(yytext)+1);
 			                        strcpy(str, yytext);

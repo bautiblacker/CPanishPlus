@@ -44,7 +44,7 @@ void argParse(int argc, char *argv[], struct op_values * op) {
         case ':':
             fprintf(stdout, "Opción '%s' requiere un argumento\n", argv[optind - 1]);
             break;
-        case '?': 
+        case '?':
         default:
             fprintf(stdout, "Opción '%s' desconocida\n", argv[optind - 1]);
             exit(1);

@@ -1,0 +1,35 @@
+Se definen las siguientes variables globales:
+J es un entero que vale 100.
+
+
+Principal es una funcion que devuelve un entero:
+    Mostrar "¡Bienvenido a la funcion Modulo!\n".
+    NUMERO1 es una cadena que vale "".
+    LETRA es un caracter que vale "l".
+    NUMERO2 es una cadena que vale "".
+
+    Mostrar "Ingrese el primer numero:"
+
+    Repetir mientras LETRA sea distinto a "\n":
+        NUMERO1 ahora vale NUMERO1 + LETRA.
+        Leer un caracter del teclado y guardarlo en LETRA.
+    Fin.
+
+    INPUT1 es un entero que vale 0.
+
+    Mostrar "Ingrese el segundo numero:"
+
+    LETRA ahora vale "l".
+    Repetir mientras LETRA sea distinto a "\n":
+        NUMERO2 ahora vale NUMERO2 + LETRA.
+        Leer un caracter del teclado y guardarlo en LETRA.
+    Fin.
+
+    INPUT2 es un entero que vale 0.
+
+    Mostrar "Vamos a probar esta operacion con los siguientes datos:\n".
+    Mostrar "Tenemos los numeros: " + NUMERO1 + " y " + NUMERO2 + "\n".
+    Mostrar "Resultado de la operacion: " + NUMERO1 % NUMERO2.
+    Mostrar "\n".
+Fin.
+.

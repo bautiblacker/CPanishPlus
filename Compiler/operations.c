@@ -4,7 +4,7 @@
 
 #define MAX_VAR 100
 
-typedef enum operations {SUMA, RESTA, MULT, DIV} operation;
+typedef enum operations {SUMA, RESTA, MULT, DIV, MOD, EXPO} operation;
 
 typedef struct var {
     char * name;
@@ -55,7 +55,7 @@ Node * addExpressions(Node * n1, Node * n2) {
             } else {
                 strcpy(value, "\"");
                 strcpy(value + 1, n1->value);
-                strcpy(value + len1 + 1, n2->value + 1);   
+                strcpy(value + len1 + 1, n2->value + 1);
             }
             ret = newNode(TYPE_STRING, value);
         } else {
@@ -90,6 +90,19 @@ Node * subtractExpressions(Node * n1, Node * n2) {
     }
 
     return ret;
+}
+
+Node * moduleExpressions(Node * n1,  Node * n2) {
+    Node * ret;
+
+    if (n1->type == TYPE_INT && n2->type == TYPE_INT) {
+        ret = intOperation(n1, n2, MOD);
+    } else {
+        yyerror("Resta entre tipos incompatibles.\n");
+    }
+
+    return ret;
+
 }
 
 Node * multiplyExpressions(Node * n1, Node * n2) {
@@ -141,9 +154,28 @@ Node * divideExpressions(Node * n1, Node * n2) {
     return ret;
 }
 
-Node * numberOperation(Node * n1, Node * n2, operation op) {
+Node * exponentExpressions(Node * n1, Node * n2) {
     Node * ret;
 
+    if (n1->type == TYPE_INT && n2->type == TYPE_INT) {
+        int loop = atoi(n2->value);
+        if(loop == 0) ret->value = "1";
+        else if(loop == 1) ret->value = n1->value;
+        else if (loop > 1){
+          ret = intOperation(n1, n1, MULT);
+          loop--;
+          for(loop; loop > 1; loop--){
+            ret = intOperation(ret, n1, MULT);
+          }}
+    } else {
+        yyerror("Potencia entre tipos incompatibles.\n");
+    }
+
+    return ret;
+}
+
+Node * numberOperation(Node * n1, Node * n2, operation op) {
+    Node * ret;
     if (n1->value != NULL && n2->value != NULL) {
         double i1 = n1->type == TYPE_INT ? atoi(n1->value) : atof(n1->value);
         double i2 = n2->type == TYPE_INT ? atoi(n2->value) : atof(n2->value);
@@ -161,6 +193,11 @@ Node * numberOperation(Node * n1, Node * n2, operation op) {
                 break;
             case DIV:
                 res = i1 / i2;
+                break;
+            case MOD:
+                res = (int)i1 % (int)i2;
+            case EXPO:
+                res = (int)i1 ^ (int)i2;
                 break;
         }
 
@@ -192,6 +229,12 @@ Node * numberOperation(Node * n1, Node * n2, operation op) {
                 break;
             case DIV:
                 opStr = " / ";
+                break;
+            case MOD:
+                opStr = " % ";
+                break;
+            case EXPO:
+                opStr = " ^ ";
                 break;
         }
         append(ret, newNode(TYPE_LITERAL, opStr));
