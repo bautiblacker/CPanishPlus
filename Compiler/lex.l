@@ -53,6 +53,7 @@ newline         [\n]
 "*"                 {return mult;}
 "/"                 {return divis;}
 "%"                 {return mod;}
+"^"                 {return expo;}
 "Si"                {return si;}
 ":"                 {return dos_puntos;}
 "Fin"               {return fin;}
