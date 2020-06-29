@@ -37,10 +37,12 @@ newline         [\n]
 "un entero"      {return t_entero;}
 "una cadena"     {return t_cadena;}
 "una lista de enteros"      {return t_lista_enteros;}
+"es un stack de enteros"    {return t_stack;}
 "es "            {return es;}
 "que vale"          {return asignar;}
 "ahora vale"        {return reasignar;}
 "Mostrar"           {return mostrar; }
+"Mostrar al revez"  {return mostrar_r;}
 "."                 {return punto;}
 "("                 {return par_abrir;}
 ")"                 {return par_cerrar;}
@@ -54,6 +56,7 @@ newline         [\n]
 "Fin"               {return fin;}
 " y "               {return y;}
 " o "               {return o;}
+" de "              {return de;}
 "es igual a"        {return igual;}
 "es mayor a"        {return mayor;}
 "es mayor o igual a"   {return mayor_igual;}
@@ -79,6 +82,7 @@ newline         [\n]
 "Recibe"           {return recibe;}
 "Leer un caracter del teclado y guardarlo en "           {return leer_en;}
 "Agregar"                   {return agregar;}
+"Borrar"                    {return borrar;}
 "a"                         {return a;}
 
 -?{digit}+                      {   char * str = malloc(strlen(yytext)+1);

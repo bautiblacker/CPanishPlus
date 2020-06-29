@@ -1,6 +1,6 @@
 #include "list.h"
 #include "compiler.h"
-#include "stdlib.h"
+#include <stdlib.h>
 
 #define MAX_VAR 10
 
@@ -12,11 +12,6 @@ typedef struct varList {
     int type;
     int scope;
 } varList;
-
-varList varTable[MAX_VAR];
-int varTableIndex = 0;
-int currScope = 0;
-int vars = 0;
 
 static l_node * newListNode(char * value) {
 	l_node * node = malloc(sizeof(l_node));
@@ -31,7 +26,6 @@ l_node * addListNode(char * value, l_node * first) {
         first = newListNode(value);
         return first;
     }
-
     l_node * aux = first;
     while( aux->next != NULL) {
         aux = aux->next;
@@ -71,4 +65,33 @@ l_node * removeFromList(char * value, l_node * first) {
     }
 
     free(aux);
+}
+
+void printfList(l_node * first) {
+    if(first != NULL) {
+        l_node * aux = first;
+        while(aux != NULL) {
+            printf("%s ", aux->value);
+            aux = aux->next;
+        }
+    } else {
+        printf("empty list");
+    }
+    printf("\n");
+}
+
+void printBackwards(l_node * first) {
+    if(first == NULL) {
+        return;
+    }
+
+    l_node * aux = first;
+    while(aux->next != NULL) {
+        aux = aux->next;
+    }
+
+    while(aux !=NULL) {
+        printf("%s ", aux->value);
+    }
+    printf("\n");
 }

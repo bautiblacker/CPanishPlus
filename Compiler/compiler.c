@@ -75,7 +75,7 @@ void freeResources() {
 
 void compileC(char * outputFile, int preserveTmp) {
     char commandBuffer[256];
-    sprintf(commandBuffer, "gcc %s -o %s -g", TMP_FILE_NAME, outputFile);
+    sprintf(commandBuffer, "gcc %s -o %s", TMP_FILE_NAME, outputFile);
 
     int gccStatus = system(commandBuffer);
 

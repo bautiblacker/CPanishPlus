@@ -12,14 +12,75 @@ Principal es una funcion que devuelve un entero:
     Mostrar "Ahora vamos a agregarle valores a la lista y para eso escriba cada valor seguido por un salto de linea\nUna vez que no quiera agregar mas valores, escriba: Listo!\n".
 
     LISTA1 es una lista de enteros.
-    VALOR es un entero que vale 0.
-    CARACTER es una cadena que vale "".
-    NUMBER es una cadena que vale "".
-    IsValid es un entero que vale 0.
+
+    CARACTER es una cadena que vale "\n".
     INPUT es una cadena que vale "".
+    NUMERO es una cadena que vale "".
+    IsValid es un entero que vale 0.
 
-    Agregar "1" a LISTA1.
+    Repetir mientras INPUT sea distinto a "Listo!\n":
+        Si CARACTER es igual a "\n":
+            Mostrar "Agregar valor: ".
+        Fin.
+        Leer un caracter del teclado y guardarlo en CARACTER.
+        INPUT ahora vale INPUT + CARACTER.
+        IsValid ahora vale (ValidarCaracter evaluada en CARACTER).
+        Si IsValid es igual a 1:
+            NUMERO ahora vale NUMERO + CARACTER.
+        Fin.
 
+        Si CARACTER es igual a "\n" y NUMERO es distinto a "":
+            Agregar NUMERO a LISTA1.
+            NUMERO ahora vale "".
+            INPUT ahora vale "".
+        Fin.
+    Fin.
+
+    Mostrar "Lista: ".
+    Mostrar LISTA1.
+    Mostrar "\n".
+    INPUT ahora vale "".
+    CARACTER ahora vale "".
+    NUMERO ahora vale "".
+    B es una cadena que vale "".
+    R es una cadena que vale "".
+
+    Mostrar "Ahora vamos a interactuar con la lista\n".
+    Mostrar "*  Para borrar un elemento presiona b y el numero que quisiera borrar, por ejemplo b4 eliminaria el numero 4 de la lista\n".
+    Mostrar "*  Para imprimir la lista al revez presiona r\n".
+    Mostrar "Escriba Listo! para finalizar\n".
+
+    Repetir mientras INPUT sea distinto a "Listo!\n":
+        INPUT ahora vale "".
+        Leer un caracter del teclado y guardarlo en CARACTER.
+        IsValid ahora vale (ValidarCaracter evaluada en CARACTER).
+        Si IsValid es igual a 1:
+            NUMERO ahora vale NUMERO + CARACTER.
+        Fin.
+
+        Si CARACTER es igual a "b":
+            B ahora vale "b".
+        Fin.
+
+        Si CARACTER es igual a "r":
+            R ahora vale "r".
+        Fin.
+
+        Si CARACTER es igual a "\n" y B es igual a "b":
+            Borrar NUMERO de LISTA1.
+            NUMERO ahora vale "".
+            Mostrar LISTA1.
+            B ahora vale "".
+            INPUT ahora vale "".
+        Fin.
+
+        Si R es igual a "r" y CARACTER es igual a "\n":
+            Mostrar al revez LISTA1.
+            R ahora vale "".
+            INPUT ahora vale "".
+        Fin.
+        INPUT ahora vale INPUT + CARACTER.
+    Fin.
 Fin.
 
 ValidarCaracter es una funcion que devuelve un entero.

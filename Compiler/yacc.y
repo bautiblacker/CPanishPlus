@@ -17,13 +17,14 @@
 }
 
 /* Tokens */
-%token principal recibe coma es t_cadena t_entero t_lista_enteros asignar reasignar punto par_abrir par_cerrar suma resta mult divis mod mostrar
-si fin y o protot igual mayor mayor_igual menor menor_igual distinto repetir_mientras incrementar decrementar es_funcion devuelve
-devolver evaluada_en dos_puntos prototipo_funciones variables_globales leer_en agregar a
-%token<value> cadena entero lista var_id
+%token principal recibe coma es t_cadena t_entero t_lista_enteros t_stack asignar reasignar punto par_abrir par_cerrar suma resta mult divis mod mostrar
+mostrar_r si fin y o protot igual mayor mayor_igual menor menor_igual distinto repetir_mientras incrementar decrementar es_funcion devuelve
+devolver evaluada_en dos_puntos prototipo_funciones variables_globales leer_en agregar borrar a de
+%token<value> cadena entero lista stack var_id
 %type<node> PROGRAMA PRINCIPAL LISTA_PARAMETROS PARAMETROS PARAMETRO LINEA LINEAS INSTRUCCION DECLARACION ASIGNACION REASIGNACION
 TIPO TIPO_F EXPRESION OPERACION FUNCION_BUILTIN MOSTRAR BLOQUE CONDICIONAL COMPARADOR EVALUACION REPETIR INCREMENTACION DECREMENTACION
-FUNCION FUNCIONES FIN DEVOLVER NUEVO_ALCANCE ARGUMENTOS EVALUAR_FUNC PROTOTIPO PROTOTIPOS LISTA_VAR LISTA_PROTO VARIABLE VARIABLES LEER_CHAR AGREGAR
+FUNCION FUNCIONES FIN DEVOLVER NUEVO_ALCANCE ARGUMENTOS EVALUAR_FUNC PROTOTIPO PROTOTIPOS LISTA_VAR LISTA_PROTO VARIABLE VARIABLES LEER_CHAR AGREGAR TIPO_STRUCT
+BORRAR MOSTRAR_R
 %start PROGRAMA
 
 /* Precedencia */
@@ -155,6 +156,7 @@ INSTRUCCION     : REASIGNACION                      {   $$ = $1; }
                 | DEVOLVER                          {   $$ = $1; }
                 | EXPRESION                         {   $$ = $1; }
                 | AGREGAR                           {   $$ = $1; }
+                | BORRAR                            {   $$ = $1; }
                 ;
 
 
@@ -184,6 +186,18 @@ DECLARACION     : var_id TIPO ASIGNACION            {   if (isInCurrentScope($1)
                                                         append($$, $2);
                                                         append($$, newNode(TYPE_LITERAL, $1));
                                                         append($$, $3); }
+                | var_id TIPO_STRUCT               {   if (isInCurrentScope($1) == 1)
+                                                            yyerror("Variable ya declarada previamente\n");
+                                                        if (addVar($1, $2->type) == -1)
+                                                            yyerror("Se superó el límite de variables\n");
+                                                        $$ = newNode(TYPE_EMPTY, NULL);
+                                                        append($$, $2);
+                                                        append($$, newNode(TYPE_LITERAL, $1));
+                                                        append($$, newNode(TYPE_LITERAL, " = "));
+                                                        if($2->type == TYPE_LIST) {
+                                                            append($$, newNode(TYPE_LITERAL, "malloc(sizeof(l_node))"));
+                                                        }
+                                                    };
                 ;
 
 ASIGNACION      :                                   {   $$ = NULL; }
@@ -199,11 +213,24 @@ AGREGAR         : agregar EXPRESION a var_id       {   int type = getType($4);
 
                                                             $$ = newNode(TYPE_EMPTY, NULL);
                                                             append($$, newNode(TYPE_LITERAL, "addListNode("));
-                                                            append($$, newNode(TYPE_LITERAL, $2));
+                                                            append($$, $2);
                                                             append($$, newNode(TYPE_LITERAL, ","));
-                                                            append($$, $4);
+                                                            append($$, newNode(TYPE_LITERAL, $4));
                                                             append($$, newNode(TYPE_LITERAL, ")")); }
                 ;
+BORRAR          :  borrar EXPRESION de var_id        {   int type = getType($4);
+                                                            if(type == -1)
+                                                                yyerror("Variable no declarada previamente\n");
+                                                            if (type != TYPE_LIST)
+                                                                yyerror("Asignación entre tipos incompatibles\n");
+
+                                                            $$ = newNode(TYPE_EMPTY, NULL);
+                                                            append($$, newNode(TYPE_LITERAL, "removeFromList("));
+                                                            append($$, $2);
+                                                            append($$, newNode(TYPE_LITERAL, ","));
+                                                            append($$, newNode(TYPE_LITERAL, $4));
+                                                            append($$, newNode(TYPE_LITERAL, ")"));
+                                                    };
 REASIGNACION    : var_id reasignar EXPRESION        {   int type = getType($1);
                                                         if (type == -1)
                                                             yyerror("Variable o funcion no declarada previamente\n");
@@ -217,12 +244,11 @@ REASIGNACION    : var_id reasignar EXPRESION        {   int type = getType($1);
 
 TIPO            : es t_cadena                       {   $$ = newNode(TYPE_STRING, "char * "); }
                 | es t_entero                       {   $$ = newNode(TYPE_INT, "int "); }
-                | es t_lista_enteros                {   $$ = newNode(TYPE_LIST, "l_node * "); }
                 ;
+TIPO_STRUCT     : es t_lista_enteros                {   $$ = newNode(TYPE_LIST, "l_node * "); };
 
 TIPO_F          : t_cadena                          {   $$ = newNode(TYPE_STRING, "char * "); }
                 | t_entero                          {   $$ = newNode(TYPE_INT, "int "); }
-                | t_lista_enteros                   {   $$ = newNode(TYPE_LIST, "l_node * "); }
                 ;
 
 EXPRESION       : cadena                            {   $$ = newNode(TYPE_STRING, $1); }
@@ -242,6 +268,7 @@ EXPRESION       : cadena                            {   $$ = newNode(TYPE_STRING
                                                         } }
                 | OPERACION                         {   $$ = $1; }
                 | EVALUAR_FUNC                      {   $$ = $1; }
+                | AGREGAR                           {   $$ = $1; }
                 ;
 
 OPERACION       : EXPRESION suma EXPRESION          {   $$ = addExpressions($1, $3); }
@@ -270,6 +297,7 @@ ARGUMENTOS      : EXPRESION coma ARGUMENTOS         {   $$ = newNode(TYPE_EMPTY,
 
 FUNCION_BUILTIN : MOSTRAR                           {   $$ = $1; }
                 | LEER_CHAR                         {   $$ = $1; }
+                | MOSTRAR_R                         {   $$ = $1; }
                 ;
 
 MOSTRAR         : mostrar EXPRESION                 {   $$ = newNode(TYPE_EMPTY, NULL);
@@ -277,10 +305,20 @@ MOSTRAR         : mostrar EXPRESION                 {   $$ = newNode(TYPE_EMPTY,
                                                             append($$, newNode(TYPE_LITERAL, "printf(\"%s\", "));
                                                         if ($2->type == TYPE_INT)
                                                             append($$, newNode(TYPE_LITERAL, "printf(\"%d\", "));
+                                                        if ($2->type == TYPE_LIST) {
+                                                            append($$, newNode(TYPE_LITERAL, "printList("));
+                                                        }
                                                         append($$, $2);
                                                         append($$, newNode(TYPE_LITERAL, ")")); }
                 ;
-
+MOSTRAR_R       : mostrar_r EXPRESION               {   $$ = newNode(TYPE_EMPTY, NULL);
+                                                        if ($2->type == TYPE_STRING || $2->type == TYPE_INT)
+                                                            yyerror("Operacion no valida para este tipo de variable\n");
+                                                        if ($2->type == TYPE_LIST) {
+                                                            append($$, newNode(TYPE_LITERAL, "printBackwards("));
+                                                        }
+                                                        append($$, $2);
+                                                        append($$, newNode(TYPE_LITERAL, ")")); };
 LEER_CHAR       : leer_en var_id                    {   int type = getType($2);
                                                         if (type == -1)
                                                             yyerror("Variable no declarada previamente\n");
@@ -368,11 +406,15 @@ void printHeaders() {
     fprintf(tmpFile, "#include <stdlib.h>\n");
     fprintf(tmpFile, "#include <string.h>\n");
 
-    fprintf(tmpFile, "%s" , strCatFunction);
-    fprintf(tmpFile, "%s" , strIntCatFunction);
-    fprintf(tmpFile, "%s" , strIntMultFunction);
-    fprintf(tmpFile, "%s" , getCharToVar);
-    fprintf(tmpFile, "%s", listStructure);
-    fprintf(tmpFile, "%s", newListNodeL);
-    fprintf(tmpFile, "%s", addListNodeL);
+    fprintf(tmpFile, "%s\n" , strCatFunction);
+    fprintf(tmpFile, "%s\n" , strIntCatFunction);
+    fprintf(tmpFile, "%s\n" , strIntMultFunction);
+    fprintf(tmpFile, "%s\n" , getCharToVar);
+    fprintf(tmpFile, "%s\n", listStructure);
+    fprintf(tmpFile, "%s\n", newListNodeL);
+    fprintf(tmpFile, "%s\n", addListNodeL);
+    fprintf(tmpFile, "%s\n", printListL);
+    fprintf(tmpFile, "%s\n", removeFromListL);
+    fprintf(tmpFile, "%s\n", printBackwards);
+
 }
