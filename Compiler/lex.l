@@ -1,6 +1,7 @@
 %{
     #include <stdio.h>
     #include <stdlib.h>
+    #include <stdbool.h>
     #include "y.tab.h"
 
     extern void yyerror(char * s);
@@ -15,6 +16,7 @@ digit			[0-9]
 alpha			[a-zA-Z]
 space			[ \t]
 newline         [\n]
+
 
 %%
 
@@ -35,6 +37,8 @@ newline         [\n]
 
 ","                 {return coma;}
 "un entero"      {return t_entero;}
+"un doble"       {return t_doble;}
+"un booleano"    {return t_booleano;}
 "una cadena"     {return t_cadena;}
 "una lista de enteros"      {return t_lista_enteros;}
 "es un stack de enteros"    {return t_stack;}
@@ -92,8 +96,21 @@ newline         [\n]
 			                        strcpy(str, yytext);
 			                        yylval.value = str;
 			                        return entero; }
+                                           
+-?{digit}+(.{digit}+)?          {
+                                    char * str = malloc(strlen(yytext)+1);
+                                    strcpy(str, yytext);
+                                    yylval.value = str;
+                                    return doble; }
 
-{alpha}({alpha}|{digit}|'_')*       {   char * str = malloc(strlen(yytext)+1);
+((verdadero)?|(falso)?) {
+                                    char * str = malloc(strlen(yytext)+1);
+                                    strcpy(str, yytext);
+                                    yylval.value = strcmp(str,"verdadero") == 0 ? "true" : "false";
+                                    return booleano; }
+
+{alpha}({alpha}|{digit}|'_')*       {   
+                                    char * str = malloc(strlen(yytext)+1);
 			                        strcpy(str,yytext);
 			                        yylval.value = str;
 			                        return var_id; }
