@@ -42,3 +42,6 @@ modulo:
 
 operacionesencompilacion:
 	./cpanish++ Examples/OperacionesEnCompilacion -o ejemploOperacionesEnCompilacion
+
+pilas:
+	./cpanish++ Examples/Pilas -o ejemploPilas

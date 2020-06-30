@@ -5,7 +5,7 @@ Principal es una funcion que devuelve un entero:
     Mostrar "Ahora vamos a agregarle valores a la pila y para eso escriba cada valor seguido por un salto de linea\nUna vez que no quiera agregar mas valores, escriba: Listo!\n".
 
     PILA1 es una pila de enteros.
-    
+
     CARACTER es una cadena que vale "".
     INPUT es una cadena que vale "".
 
@@ -35,19 +35,27 @@ Principal es una funcion que devuelve un entero:
     B es una cadena que vale "".
     P es una cadena que vale "".
 
+
     Mostrar "Ahora vamos a interactuar con la pila\n".
     Mostrar "*  Para sacar el primer elemento, presione b\n".
     Mostrar "*  Para saber cual es el primer elemento de la pila escribir p\n".
     Mostrar "Escriba Listo! para finalizar\n".
 
-    Repetir mientras INPUT sea distinto a "Listo!":
+    Repetir mientras INPUT sea distinto a "Listo!\n":
         Si CARACTER es igual a "\n":
             Si B es igual a "b":
-                Sacar el primer elemento de PILA1.
+                Sacar PILA1.
                 Mostrar PILA1.
             Fin.
             Si P es igual a "p":
-                Ojeada a PILA1.
+                PEEK es una cadena que vale (Ojeada a PILA1).
+                Si PEEK esta presente:
+                    Mostrar "Primer elemento del stack: " + PEEK + "\n".
+                Fin.
+                Sino:
+                    Mostrar "El stack no contiene elementos\n".
+                Fin.
+
             Fin.
         Fin.
 

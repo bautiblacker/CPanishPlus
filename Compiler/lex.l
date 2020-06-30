@@ -96,12 +96,13 @@ newline         [\n]
 "Obtener " {return obtener;}
 "esta presente" {return presente;}
 "Sino" {return sino;}
+"Sacar" {return sacar;}
 
 -?{digit}+                      {   char * str = malloc(strlen(yytext)+1);
 			                        strcpy(str, yytext);
 			                        yylval.value = str;
 			                        return entero; }
-                                           
+
 -?{digit}+(.{digit}+)?          {
                                     char * str = malloc(strlen(yytext)+1);
                                     strcpy(str, yytext);
@@ -114,7 +115,7 @@ newline         [\n]
                                     yylval.value = strcmp(str,"verdadero") == 0 ? "true" : "false";
                                     return booleano; }
 
-{alpha}({alpha}|{digit}|'_')*       {   
+{alpha}({alpha}|{digit}|'_')*       {
                                     char * str = malloc(strlen(yytext)+1);
 			                        strcpy(str,yytext);
 			                        yylval.value = str;

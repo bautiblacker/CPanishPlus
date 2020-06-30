@@ -314,7 +314,7 @@ static char * newStackNode = "static s_node * newStackNode(char * value) {\n"
                                 "node->prev = NULL;\n"
                                 "return node;\n"
                             "}\n";
-                                
+
 static char * pushStack = "void push(char * value, sm_node * stack) {\n"
                                 "\ts_node * newNode = newStackNode(value);\n"
                                 "\tif(stack->first == NULL) {\n"
@@ -325,7 +325,7 @@ static char * pushStack = "void push(char * value, sm_node * stack) {\n"
                                 "\tstack->first->prev = newNode;\n"
                                 "\tstack->first = newNode;\n"
                             "}\n";
-                            
+
 static char * printStack = "void printStack(sm_node * stack) {\n"
                                 "\tif (stack->first == NULL) printf(\"Stack vacio\\n\");\n"
                                 "\ts_node * current = stack->first;\n"
@@ -335,8 +335,24 @@ static char * printStack = "void printStack(sm_node * stack) {\n"
                                 "\t}\n"
                             "}\n";
 
-static char * popStack = "";
-                                                
+static char * peekStack = "char * peekStack(sm_node * stack) {\n"
+                            "\tif(stack != NULL && stack->first != NULL) {\n"
+                                "\t\treturn stack->first->value;\n"
+                            "\t}\n"
+
+                            "\treturn NULL;\n"
+                        "}";
+static char * popStack = "char * popStack(sm_node * stack) {\n"
+                            "\tif(stack == NULL || stack->first == NULL) {\n"
+                                "\treturn NULL;\n"
+                            "\t}\n"
+
+                            "\tchar * ret = stack->first->value;\n"
+                            "\tstack->first = stack->first->next;\n"
+
+                            "return ret;\n"
+                        "}\n";
+
 
 Node * addExpressions(Node * n1, Node * n2);
 Node * subtractExpressions(Node * n1, Node * n2);
