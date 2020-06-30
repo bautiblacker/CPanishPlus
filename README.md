@@ -12,9 +12,10 @@
 3. Compilar ejecutando el comando `make all`. Esto creará el ejecutable `cpanish++`.
 
 ### Instrucciones de ejecución
-1. **En caso de querer ejecutar un archivo de prueba provisto.**<br>
+1. **En caso de querer ejecutar uno de los ejemplos de prueba provisto.**<br>
   a. Ejecutar el comando `./cpanish++ Examples/<archivo deseado> -o <nombre ejecutable>` o simplemente ejecutar `make <nombre archivo en minuscula y sin espacios>`. Esto creará un ejecutable cuyo nombre es el que usted eligio si va por la primera opción o, en caso de elegir la segundo opción, creará un ejecutable llamado igual que el nombre del archivo omitiendo los espacios.<br>
   b. Ejecutar el comando `./<archivo deseado>` o `./<nombre archivo ejecutable` dependiendo el camino que siguio en el item 1a . Listo! <br>
+  Aclaración: El comando `make examples` crea un ejecutable para cada ejemplo de prueba.
 2. **En caso de querer ejecutar su propio archivo de prueba**<br>
   a. Crear dicho archivo utilizando los comandos `nano`, `vim`, o utilizando un editor de texto y guardarlo en el directorio TLA/Examples.  Escribir el codigo deseado.<br>
   b. Una vez finalizado el ejemplo, compilarlo ejecutando `./cpanish++ Examples/<archivo creado> -o <nombre ejecutable>` <br>
