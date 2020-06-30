@@ -17,10 +17,11 @@ Principal es una funcion que devuelve un entero:
     NUMERO es una cadena que vale "".
     IsValid es un entero que vale 0.
 
-    Repetir mientras INPUT sea distinto a "Listo!\n":
+    Repetir mientras INPUT sea distinto a "Listo!":
         Si CARACTER es igual a "\n":
             Mostrar "Agregar valor: ".
         Fin.
+
         Leer un caracter del teclado y guardarlo en CARACTER.
         INPUT ahora vale INPUT + CARACTER.
         IsValid ahora vale (ValidarCaracter evaluada en CARACTER).
@@ -28,9 +29,11 @@ Principal es una funcion que devuelve un entero:
             NUMERO ahora vale NUMERO + CARACTER.
         Fin.
 
-        Si CARACTER es igual a "\n" y NUMERO es distinto a "":
-            Agregar NUMERO a COLA1.
-            NUMERO ahora vale "".
+        Si CARACTER es igual a "\n":
+            Si NUMERO es distinto a "":
+                Agregar NUMERO a COLA1.
+                NUMERO ahora vale "".
+            Fin.
             INPUT ahora vale "".
         Fin.
     Fin.
@@ -44,43 +47,46 @@ Principal es una funcion que devuelve un entero:
     B es una cadena que vale "".
     P es una cadena que vale "".
 
-    Mostrar "Ahora vamos a interactuar con la lista\n".
+    Mostrar "Ahora vamos a interactuar con la cola\n".
     Mostrar "*  Para borrar un elemento presiona b y el numero que quisiera borrar, por ejemplo b4 eliminaria el numero 4 de la lista\n".
     Mostrar "*  Para saber cual es el primer elemento de la cola escribir p\n".
     Mostrar "Escriba Listo! para finalizar\n".
 
     Repetir mientras INPUT sea distinto a "Listo!\n":
         INPUT ahora vale "".
-        Leer un caracter del teclado y guardarlo en CARACTER.
-        IsValid ahora vale (ValidarCaracter evaluada en CARACTER).
-        Si IsValid es igual a 1:
-            NUMERO ahora vale NUMERO + CARACTER.
-        Fin.
+        CARACTER ahora vale "".
+        Repetir mientras CARACTER sea distinto a "\n":
+            Leer un caracter del teclado y guardarlo en CARACTER.
+            IsValid ahora vale (ValidarCaracter evaluada en CARACTER).
+            Si IsValid es igual a 1:
+                NUMERO ahora vale NUMERO + CARACTER.
+            Fin.
 
-        Si CARACTER es igual a "b":
-            B ahora vale "b".
-        Fin.
+            Si CARACTER es igual a "b":
+                B ahora vale "b".
+            Fin.
 
-        Si CARACTER es igual a "p":
-            P ahora vale "p".
-        Fin.
+            Si CARACTER es igual a "p":
+                P ahora vale "p".
+            Fin.
 
-        Si CARACTER es igual a "\n" y B es igual a "b":
-            Borrar NUMERO de COLA1.
-            NUMERO ahora vale "".
-            Mostrar COLA1.
-            B ahora vale "".
-            INPUT ahora vale "".
-        Fin.
+            Si CARACTER es igual a "\n" y B es igual a "b":
+                Borrar NUMERO de COLA1.
+                NUMERO ahora vale "".
+                Mostrar COLA1.
+                B ahora vale "".
+                INPUT ahora vale "".
+            Fin.
 
-        Si P es igual a "p" y CARACTER es igual a "\n":
-            PEEK es un entero que vale (Ojeada a COLA1).
-            Mostrar "El primer elemento es: " + PEEK + "\n".
-            P ahora vale "".
-            INPUT ahora vale "".
-        Fin.
+            Si P es igual a "p" y CARACTER es igual a "\n":
+                PEEK es un entero que vale (Ojeada a COLA1).
+                Mostrar "El primer elemento es: " + PEEK + "\n".
+                P ahora vale "".
+                INPUT ahora vale "".
+            Fin.
 
-        INPUT ahora vale INPUT + CARACTER.
+            INPUT ahora vale INPUT + CARACTER.
+        Fin.
     Fin.
 Fin.
 

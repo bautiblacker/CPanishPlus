@@ -110,7 +110,7 @@ static char * removeFromListL = "l_node * removeFromList(char * value, l_node * 
 
                                     "\tif(aux == NULL) {\n"
                                         "\t\tprintf(\"Elemento no pertenece a la coleccion\\n\");\n"
-                                        "\t\treturn NULL;\n"
+                                        "\t\treturn first;\n"
                                     "\t}\n"
 
                                     "\tprev->next = aux->next;\n"
@@ -201,6 +201,158 @@ static char * peekQueue = "int peekQueue(q_node * q) {\n"
 
                             "\treturn q->first->value;\n"
                         "}\n";
+
+static char * mapStructure = "typedef struct MapNode {\n"
+                                "char * key;\n"
+                                "char * value;\n"
+                                "struct MapNode * next;\n"
+                                "struct MapNode * prev;\n"
+                                "} MapNode;\n";
+
+static char * emptyMapNode = "MapNode * newEmptyMapNode() {\n"
+                                "\tMapNode * mapNode = malloc(sizeof(MapNode*));\n"
+                                "\tmapNode->key = NULL;\n"
+                                "\tmapNode->value = NULL;\n"
+                                "\tmapNode->next = NULL;\n"
+                                "\tmapNode->prev = NULL;\n"
+                                "\treturn mapNode;\n"
+                            "}\n";
+
+
+static char * addMapNode = "MapNode * addKeyValue(MapNode * map, char * key, char * value) {\n"
+                                "\tif (map == NULL) {\n"
+                                    "\t\tmap = newEmptyMapNode();\n"
+                                "\t}\n"
+                                "\tif (emptyMap(map)) {\n"
+                                    "\t\tmap->key = key;\n"
+                                   "\t\tmap->value = value;\n"
+                                    "\t\treturn map;\n"
+                                "\t} else {\n"
+                                    "\t\tMapNode * current = malloc(sizeof(MapNode*));\n"
+                                    "\t\tcurrent = search(map, key);\n"
+                                    "\t\tif (current != NULL) {\n"
+                                        "\t\t\tcurrent->value = value;\n"
+                                        "\t\t\treturn map;\n"
+                                    "\t\t}\n"
+                                    "\t\tcurrent = map;\n"
+                                    "\t\twhile (current->next != NULL) {\n"
+                                        "\t\t\tcurrent = current->next;\n"
+                                    "\t\t}\n"
+                                    "\t\tcurrent->next = newMapNode(key, value);\n"
+                                    "\t\tcurrent->next->prev = current;\n"
+                                "\t}\n"
+                                "\treturn map;\n"
+                            "}\n";
+
+static char * searchMapNode = "MapNode * search(MapNode * map, char * key) {\n"
+                                    "\tMapNode * current = malloc(sizeof(MapNode*));\n"
+                                    "\tcurrent = map;\n"
+                                    "\twhile(current != NULL) {\n"
+                                        "\t\tif (strcmp(current->key, key) == 0) {\n"
+                                        "\t\t\treturn current;\n"
+                                        "\t\t}\n"
+                                        "\t\tcurrent = current->next;\n"
+                                    "\t}\n"
+                                    "\treturn NULL;\n"
+                                "}\n";
+
+static char * emptyMap = "int emptyMap(MapNode * map) {\n"
+                            "\treturn map->key == NULL;\n"
+                        "}\n";
+
+static char * newMapNode = "MapNode * newMapNode(char * key, char * value) {\n"
+                                "\tMapNode * current = newEmptyMapNode();\n"
+                                "\tcurrent->key = key;\n"
+                                "\tcurrent->value = value;\n"
+                                "\treturn current;\n"
+                            "}\n";
+
+static char * getMapNode = "char * getValue(MapNode * map, char * key) {\n"
+                                "\tMapNode * present = search(map, key);\n"
+                                "\tif (present == NULL) return NULL;\n"
+                                "\treturn present->value;\n"
+                            "}\n";
+
+static char * removeMapNode = "MapNode * removeKey(MapNode * map, char * key) {\n"
+                                    "\tMapNode * current = search(map, key);\n"
+                                    "\tif (current == NULL) return map;\n"
+                                    "\tif (current->next == NULL) {\n"
+                                        "\t\tif (current->prev != NULL) {\n"
+                                            "\t\t\tcurrent->prev->next = NULL;\n"
+                                        "\t\t}\n"
+                                    "\t} else {\n"
+                                        "\t\tif (current->prev == NULL) {\n"
+                                            "\t\t\tcurrent->next->prev = NULL;\n"
+                                            "\t\t\tcurrent->key = NULL;\n"
+                                            "\t\t\tcurrent->value = NULL;\n"
+                                            "\t\t\treturn current->next;\n"
+                                        "\t\t} else {\n"
+                                            "\t\t\tcurrent->prev->next = current->next;\n"
+                                            "\t\t\tcurrent->next->prev = current->prev;\n"
+                                        "\t\t}\n"
+                                    "\t}\n"
+                                    "\tcurrent->key = NULL;\n"
+                                    "\tcurrent->value = NULL;\n"
+                                    "\treturn map;\n"
+                                "}\n";
+
+static char * stackNode = "typedef struct sNode {\n"
+                                "char * value;\n"
+                                "struct sNode * next;\n"
+                                "struct sNode * prev;\n"
+                            "} s_node;\n";
+
+static char * stackMotherNode = "typedef struct sMNode {\n"
+                                    "\ts_node * first;\n"
+                                    "\tint size;\n"
+                                "} sm_node;\n";
+
+static char * newStackNode = "static s_node * newStackNode(char * value) {\n"
+                                "s_node * node = (s_node *)malloc(sizeof(s_node));\n"
+                                "node->value = value;\n"
+                                "node->next = NULL;\n"
+                                "node->prev = NULL;\n"
+                                "return node;\n"
+                            "}\n";
+
+static char * pushStack = "void push(char * value, sm_node * stack) {\n"
+                                "\ts_node * newNode = newStackNode(value);\n"
+                                "\tif(stack->first == NULL) {\n"
+                                    "\t\tstack->first = newNode;\n"
+                                    "\t\treturn;\n"
+                                "\t}\n"
+                                "\tnewNode->next = stack->first;\n"
+                                "\tstack->first->prev = newNode;\n"
+                                "\tstack->first = newNode;\n"
+                            "}\n";
+
+static char * printStack = "void printStack(sm_node * stack) {\n"
+                                "\tif (stack->first == NULL) printf(\"Stack vacio\\n\");\n"
+                                "\ts_node * current = stack->first;\n"
+                                "\twhile (current != NULL) {\n"
+                                    "\t\tprintf(\"[\t\t%s\t\t]\\n\", current->value);\n"
+                                    "\t\tcurrent = current->next;\n"
+                                "\t}\n"
+                            "}\n";
+
+static char * peekStack = "char * peekStack(sm_node * stack) {\n"
+                            "\tif(stack != NULL && stack->first != NULL) {\n"
+                                "\t\treturn stack->first->value;\n"
+                            "\t}\n"
+
+                            "\treturn NULL;\n"
+                        "}";
+static char * popStack = "char * popStack(sm_node * stack) {\n"
+                            "\tif(stack == NULL || stack->first == NULL) {\n"
+                                "\treturn NULL;\n"
+                            "\t}\n"
+
+                            "\tchar * ret = stack->first->value;\n"
+                            "\tstack->first = stack->first->next;\n"
+
+                            "return ret;\n"
+                        "}\n";
+
 
 Node * addExpressions(Node * n1, Node * n2);
 Node * subtractExpressions(Node * n1, Node * n2);

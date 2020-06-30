@@ -1,0 +1,129 @@
+/*
+** En este ejemplo se pone a prueba el uso del tipo de dato Mapa
+*/
+
+Principal es una funcion que devuelve un entero:
+    Mostrar "¡Bienvenido! Vamos a crear un mapa.\n".
+
+    Mostrar "Inserte las claves, acompañadas de su valor de la siguiente manera: \nLLAVE:VALOR\n".
+    Mostrar "Una vez que finalice, escriba: Listo!\n".
+
+    FRASE es una cadena que vale "".
+    LLAVE es una cadena que vale "".
+    VALOR es una cadena que vale "".
+    CARACTER es una cadena que vale "".
+
+    MAPA es un mapa.
+
+    Repetir mientras FRASE sea distinto a "Listo!":
+        FRASE ahora vale "".
+        CARACTER ahora vale "".
+        LLAVE ahora vale "".
+        VALOR ahora vale "".
+        Repetir mientras CARACTER sea distinto a "\n":
+            Si CARACTER es distinto a ":" y CARACTER es distinto a "\n":
+                FRASE ahora vale FRASE + CARACTER.
+            Fin.
+
+            Si CARACTER es igual a ":":
+                LLAVE ahora vale FRASE.
+                FRASE ahora vale "".
+            Fin.
+
+            Leer un caracter del teclado y guardarlo en CARACTER.
+
+            Si CARACTER es igual a "\n":
+                VALOR ahora vale FRASE.
+                Si LLAVE es distinto a "": 
+                    Agregar LLAVE VALOR a MAPA.
+                Fin.
+            Fin.
+        Fin.
+    Fin.
+
+    Mostrar "\nAhora seleccione una llave ingresada para obtener el valor, una vez que quiera finalizar escriba: Listo!\n".
+
+    FRASE ahora vale "".
+    LLAVE ahora vale "".
+    CARACTER ahora vale "".
+
+    Repetir mientras CARACTER sea distinto a "\n":
+        FRASE ahora vale FRASE + CARACTER.
+        Leer un caracter del teclado y guardarlo en CARACTER.
+    Fin.
+
+    Repetir mientras FRASE sea distinto a "Listo!":
+        RESULTADO es una cadena que vale (FRASE de MAPA).
+
+        Si RESULTADO esta presente:
+            Mostrar "El valor para la llave '" + FRASE + "' es: " + RESULTADO + "\n".
+        Fin.
+        Sino:
+            Mostrar "El mapa no contiene un nodo con la llave: '" + FRASE + "'\n".
+        Fin.
+
+        FRASE ahora vale "".
+        CARACTER ahora vale "".
+
+        Repetir mientras CARACTER sea distinto a "\n":
+            FRASE ahora vale FRASE + CARACTER.
+            Leer un caracter del teclado y guardarlo en CARACTER.
+        Fin.
+
+
+    Fin.
+
+    LLAVE ahora vale "".
+    CARACTER ahora vale "".
+
+    Mostrar "\nAhora vamos a remover algún nodo o nodos, simplemente escriba la llave. Una vez que finalice, escriba: Listo!\n".
+
+    Repetir mientras LLAVE sea distinto a "Listo!":
+        Si LLAVE es distinto a "":
+            Borrar LLAVE de MAPA.
+            Mostrar "Si existe el nodo con llave: '" + LLAVE + "', lo hemos borrado del mapa!\n".
+        Fin.
+
+        LLAVE ahora vale "".
+        CARACTER ahora vale "".
+
+        Repetir mientras CARACTER sea distinto a "\n":
+            LLAVE ahora vale LLAVE + CARACTER.
+            Leer un caracter del teclado y guardarlo en CARACTER.
+        Fin.
+
+    Fin.
+
+    Mostrar "\nComprobemos que se ha borrado el nodo correctamente!\n".
+    Mostrar "Seleccione una llave ingresada para obtener el valor, una vez que quiera finalizar escriba: Listo!\n".
+
+    FRASE ahora vale "".
+    LLAVE ahora vale "".
+    CARACTER ahora vale "".
+
+    Repetir mientras CARACTER sea distinto a "\n":
+        FRASE ahora vale FRASE + CARACTER.
+        Leer un caracter del teclado y guardarlo en CARACTER.
+    Fin.
+
+    Repetir mientras FRASE sea distinto a "Listo!":
+        RESULTADO es una cadena que vale (FRASE de MAPA).
+
+        Si RESULTADO esta presente:
+            Mostrar "El valor para la llave '" + FRASE + "' es: " + RESULTADO + "\n".
+        Fin.
+        Sino:
+            Mostrar "El mapa no contiene un nodo con la llave: '" + FRASE + "'\n".
+        Fin.
+
+        FRASE ahora vale "".
+        CARACTER ahora vale "".
+
+        Repetir mientras CARACTER sea distinto a "\n":
+            FRASE ahora vale FRASE + CARACTER.
+            Leer un caracter del teclado y guardarlo en CARACTER.
+        Fin.
+
+
+    Fin.
+Fin.

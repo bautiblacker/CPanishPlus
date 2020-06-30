@@ -1,4 +1,4 @@
-#include "queue.h"
+#include "stack.h"
 
 char * peek(l_node * first) {
     if(first != NULL) {
