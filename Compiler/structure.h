@@ -5,10 +5,10 @@
 #include <stdlib.h>
 
 typedef struct MapNode {
-	char * key;
-	char * value;
-	struct MapNode * next;
-	struct MapNode * prev;
+    char * key;
+    char * value;
+    struct MapNode * next;
+    struct MapNode * prev;
 } MapNode;
 
 MapNode * newMapNode(char * key, char * value);
@@ -16,6 +16,10 @@ MapNode * newMapNode(char * key, char * value);
 MapNode * addKeyValue(MapNode * map, char * key, char * value);
 
 char * getValue(MapNode * map, char * key);
+
+MapNode * removeKey(MapNode * map, char * key);
+
+int emptyMap(MapNode * map);
 
 MapNode * search(MapNode * map, char * key);
 

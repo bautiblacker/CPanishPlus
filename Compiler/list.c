@@ -7,56 +7,73 @@
 typedef enum opList {ADD, REMOVE, DELETE, PEEK} opList;
 int size = 0;
 
-typedef struct varList {
-    char * name;
-    int type;
-    int scope;
-} varList;
 
-static l_node * newListNode(char * value) {
-	l_node * node = malloc(sizeof(l_node));
-	node->value = value;
+l_node * newListNode(int value) {
+    l_node * node = (l_node *)malloc(sizeof(l_node));
+    node->value = value;
     node->next = NULL;
     node->prev = NULL;
-	return node;
+    return node;
 }
 
 l_node * addListNode(char * value, l_node * first) {
+    int newValue = atoi(value);
+    l_node * newNode = newListNode(newValue);
     if(first == NULL) {
-        first = newListNode(value);
+        first = newNode;
         return first;
     }
+
     l_node * aux = first;
-    while( aux->next != NULL) {
+    while(aux->next != NULL) {
         aux = aux->next;
     }
 
-    l_node * newNode = newListNode(value);
     aux->next = newNode;
     newNode->next = NULL;
     newNode->prev = aux;
-    size++;
     return first;
 }
 
-l_node * removeFromList(char * value, l_node * first) {
-    if(strcmp(first->value, value) == 0) {
-        if(size > 1) {
-            first->next->prev = NULL;
+void printList(l_node * first) {
+   if(first != NULL) {
+        l_node * aux = first;
+        while(aux != NULL) {
+            printf("%d ", aux->value);
+            aux = aux->next;
         }
+    } else {
+        printf("empty list");
+    }
+    printf("\n");
+ };
+
+l_node * removeFromList(char * value, l_node * first) {
+    int valueToRemove = atoi(value);
+    if(first == NULL || first->next == NULL) {
+        first = NULL;
+        printf("No hay mas elementos en la coleccion\n");
+        return NULL;
+    }
+
+    if(first != NULL && (valueToRemove == first->value)) {
         first = first->next;
+        free(first->prev);
+        first->prev = NULL;
         return first;
     }
 
     l_node * prev = NULL;
     l_node * aux = first;
-    while(aux != NULL && strcmp(aux->value, value) != 0) {
+
+    while(aux != NULL && aux->value != valueToRemove) {
         prev = aux;
         aux = aux->next;
     }
 
     if(aux == NULL) {
-        return "Elemento no pertenece a la lista\n";
+        printf("Elemento no pertenece a la coleccion\n");
+        return first;
     }
 
     prev->next = aux->next;
@@ -65,19 +82,7 @@ l_node * removeFromList(char * value, l_node * first) {
     }
 
     free(aux);
-}
-
-void printfList(l_node * first) {
-    if(first != NULL) {
-        l_node * aux = first;
-        while(aux != NULL) {
-            printf("%s ", aux->value);
-            aux = aux->next;
-        }
-    } else {
-        printf("empty list");
-    }
-    printf("\n");
+    return first;
 }
 
 void printBackwards(l_node * first) {
@@ -91,7 +96,8 @@ void printBackwards(l_node * first) {
     }
 
     while(aux !=NULL) {
-        printf("%s ", aux->value);
+        printf("%d ", aux->value);
+        aux = aux->prev;
     }
     printf("\n");
 }

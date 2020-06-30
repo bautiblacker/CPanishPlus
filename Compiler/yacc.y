@@ -6,7 +6,8 @@
     #include "compiler.h"
 
     extern int lineCount;
-
+    
+    int yyparse();
     int yylex();
 	void yyerror(char * s);
     void printHeaders();
@@ -301,7 +302,7 @@ OJEADA              : peek a var_id               {int type = getType($3);
                                                         }
 
                                                         if(type == TYPE_QUEUE) {
-                                                            $$ = newNode(TYPE_EMPTY, NULL);
+                                                            $$ = newNode(TYPE_INT, NULL);
                                                             append($$, newNode(TYPE_LITERAL, "peekQueue("));
                                                         } else if(type == TYPE_STACK) {
                                                             $$ = newNode(TYPE_STRING, NULL);

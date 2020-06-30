@@ -9,9 +9,12 @@ typedef struct qNode {
     int size;
 } q_node;
 
-int queueOffer(int value, q_node * q);
-int removeFromQueue(int value, q_node * q);
+int peekQueue(q_node * q);
+
+int queueOffer(char * value, q_node * q);
+
+int removeFromQueue(char * value, q_node * q);
+
 int poll(int value, q_node * q);
-int peek(q_node * q);
 
 #endif

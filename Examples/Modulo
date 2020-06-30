@@ -4,32 +4,19 @@ J es un entero que vale 100.
 
 Principal es una funcion que devuelve un entero:
     Mostrar "¡Bienvenido a la funcion Modulo!\n".
-    NUMERO1 es una cadena que vale "".
-    LETRA es un caracter que vale "l".
-    NUMERO2 es una cadena que vale "".
+    Mostrar "Este es un pequeño ejemplo de la operacion Modulo\n".
+    Mostrar "Para eso, vamos a tomar los valores 10 y 5 como ejemplo.\n".
 
-    Mostrar "Ingrese el primer numero:"
+    NUMERO1 es un entero que vale 10.
+    NUMERO2 es un entero que vale 5.
 
-    Repetir mientras LETRA sea distinto a "\n":
-        NUMERO1 ahora vale NUMERO1 + LETRA.
-        Leer un caracter del teclado y guardarlo en LETRA.
-    Fin.
+    Mostrar "El resultado de hacer 10%5 es: " + (NUMERO1 % NUMERO2) + "\n".
 
-    INPUT1 es un entero que vale 0.
+    Mostrar "Ahora probemos con los siguientes valores: 20 y 6\n".
 
-    Mostrar "Ingrese el segundo numero:"
+    NUMERO1 ahora vale 20.
+    NUMERO2 ahora vale 6.
+    Mostrar "El resultado de hacer 20%6 es: " + (NUMERO1 % NUMERO2) + "\n".
 
-    LETRA ahora vale "l".
-    Repetir mientras LETRA sea distinto a "\n":
-        NUMERO2 ahora vale NUMERO2 + LETRA.
-        Leer un caracter del teclado y guardarlo en LETRA.
-    Fin.
-
-    INPUT2 es un entero que vale 0.
-
-    Mostrar "Vamos a probar esta operacion con los siguientes datos:\n".
-    Mostrar "Tenemos los numeros: " + NUMERO1 + " y " + NUMERO2 + "\n".
-    Mostrar "Resultado de la operacion: " + NUMERO1 % NUMERO2.
-    Mostrar "\n".
+    Mostrar "\n Si quiere probar con otros valores solo basta con modificar el archivo Examples/Modulo y asignarle a las variables los valores que quieras!\n".
 Fin.
-.

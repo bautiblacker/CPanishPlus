@@ -10,6 +10,7 @@ clean:
 	rm -f ejemploScope; \
 	rm -f ejemploTrianguloPascal; \
 	rm -f ejemploModulo; \
+	rm -f ejemploPilas; \
 	rm -f ejemploOperacionesEnCompilacion; \
 	rm -f ejemploMapa; \
 	rm -f cpanish++; \
@@ -20,7 +21,7 @@ clean:
 	rm -f y.tab.c; \
 	rm -f y.tab.h;
 
-examples: listas colas scope triangulodepascal modulo operacionesencompilacion
+examples: listas colas scope triangulodepascal modulo operacionesencompilacion mapa pila
 
 listas:
 	./cpanish++ Examples/Listas -o ejemploListas
@@ -30,6 +31,9 @@ colas:
 
 mapa:
 	./cpanish++ Examples/Mapa -o ejemploMapa
+
+pila:
+	./cpanish++ Examples/Pilas -o ejemploPilas
 
 scope:
 	./cpanish++ Examples/Scope -o ejemploScope
