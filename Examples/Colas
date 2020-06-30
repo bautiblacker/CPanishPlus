@@ -75,6 +75,7 @@ Principal es una funcion que devuelve un entero:
                 NUMERO ahora vale "".
                 Mostrar COLA1.
                 B ahora vale "".
+                P ahora vale "".
                 INPUT ahora vale "".
             Fin.
 
@@ -82,6 +83,8 @@ Principal es una funcion que devuelve un entero:
                 PEEK es un entero que vale (Ojeada a COLA1).
                 Mostrar "El primer elemento es: " + PEEK + "\n".
                 P ahora vale "".
+                B ahora vale "".
+                NUMERO ahora vale "".
                 INPUT ahora vale "".
             Fin.
 
