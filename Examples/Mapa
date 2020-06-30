@@ -16,27 +16,25 @@ Principal es una funcion que devuelve un entero:
     MAPA es un mapa.
 
     Repetir mientras FRASE sea distinto a "Listo!":
-        FRASE ahora vale "".
-        CARACTER ahora vale "".
-        LLAVE ahora vale "".
-        VALOR ahora vale "".
+        FRASE ahora vale ("").
+	CARACTER ahora vale ("").
+	LLAVE ahora vale ("").
+	VALOR ahora vale ("").
         Repetir mientras CARACTER sea distinto a "\n":
             Si CARACTER es distinto a ":" y CARACTER es distinto a "\n":
-                FRASE ahora vale FRASE + CARACTER.
+		FRASE ahora vale (FRASE + CARACTER).
             Fin.
-
             Si CARACTER es igual a ":":
-                LLAVE ahora vale FRASE.
+		LLAVE ahora vale FRASE.
                 FRASE ahora vale "".
             Fin.
-
             Leer un caracter del teclado y guardarlo en CARACTER.
 
             Si CARACTER es igual a "\n":
-                VALOR ahora vale FRASE.
-                Si LLAVE es distinto a "": 
-                    Agregar LLAVE VALOR a MAPA.
-                Fin.
+		Si LLAVE es distinto a "":
+			VALOR ahora vale FRASE.
+			Agregar LLAVE VALOR a MAPA.
+		Fin.
             Fin.
         Fin.
     Fin.
@@ -56,11 +54,11 @@ Principal es una funcion que devuelve un entero:
         RESULTADO es una cadena que vale (FRASE de MAPA).
 
         Si RESULTADO esta presente:
-            Mostrar "El valor para la llave '" + FRASE + "' es: " + RESULTADO + "\n".
+		Mostrar "El valor para la llave '" + FRASE + "' es: " + RESULTADO + "\n".
         Fin.
         Sino:
-            Mostrar "El mapa no contiene un nodo con la llave: '" + FRASE + "'\n".
-        Fin.
+                Mostrar "El mapa no contiene un nodo con la llave: '" + FRASE + "'\n".
+	Fin.
 
         FRASE ahora vale "".
         CARACTER ahora vale "".
@@ -81,7 +79,7 @@ Principal es una funcion que devuelve un entero:
     Repetir mientras LLAVE sea distinto a "Listo!":
         Si LLAVE es distinto a "":
             Borrar LLAVE de MAPA.
-            Mostrar "Si existe el nodo con llave: '" + LLAVE + "', lo hemos borrado del mapa!\n".
+		Mostrar "Si existe el nodo con llave: '" + LLAVE + "', lo hemos borrado del mapa!\n".
         Fin.
 
         LLAVE ahora vale "".
@@ -109,11 +107,11 @@ Principal es una funcion que devuelve un entero:
     Repetir mientras FRASE sea distinto a "Listo!":
         RESULTADO es una cadena que vale (FRASE de MAPA).
 
-        Si RESULTADO esta presente:
-            Mostrar "El valor para la llave '" + FRASE + "' es: " + RESULTADO + "\n".
+	Si RESULTADO esta presente:
+		Mostrar "El valor para la llave '" + FRASE + "' es: " + RESULTADO + "\n".                
         Fin.
         Sino:
-            Mostrar "El mapa no contiene un nodo con la llave: '" + FRASE + "'\n".
+                Mostrar "El mapa no contiene un nodo con la llave: '" + FRASE + "'\n".
         Fin.
 
         FRASE ahora vale "".
