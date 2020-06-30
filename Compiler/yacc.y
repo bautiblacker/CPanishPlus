@@ -285,6 +285,8 @@ BORRAR          :  borrar EXPRESION de var_id           {   int type = getType($
                                                                     append($$, newNode(TYPE_LITERAL, "removeFromQueue("));
                                                                 }
                                                                 if(type == TYPE_LIST) {
+								    append($$, newNode(TYPE_LITERAL, $4));
+							    	    append($$, newNode(TYPE_LITERAL, " = "));
                                                                     append($$, newNode(TYPE_LITERAL, "removeFromList("));
                                                                 }
 

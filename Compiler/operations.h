@@ -81,8 +81,6 @@ static char * printListL = "void printList(l_node * first) {\n"
                                     "\t\t\tprintf(\"%d \", aux->value);\n"
                                     "\t\t\taux = aux->next;\n"
                                     "\t\t}\n"
-                                "\t} else {\n"
-                                    "\t\tprintf(\"empty list\");\n"
                                 "\t}\n"
                                 "\tprintf(\"\\n\");\n"
                             "}\n";
