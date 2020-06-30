@@ -8,6 +8,8 @@
 FILE * tmpFile;
 #define TMP_FILE_NAME ".comp_mid.tmp.c"
 
+int yyparse();
+
 void freeResources();
 
 #endif

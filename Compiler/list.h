@@ -9,13 +9,19 @@ typedef enum types {TYPE_STRING, TYPE_INT} l_type;
 
 
 typedef struct lNode {
-    char * value;
-    l_node * next;
-    l_node * prev;
+    int value;
+    struct lNode * next;
+    struct lNode * prev;
 } l_node;
 
+l_node * newListNode(int value);
+
 l_node * addListNode(char * value, l_node * first);
+
+void printList(l_node * first);
+
 l_node * removeFromList(char * value, l_node * first);
 
+void printBackwards(l_node * first);
 
 #endif

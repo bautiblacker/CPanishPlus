@@ -1,6 +1,6 @@
 #include "queue.h"
 
-int queueOffer(int newValue, q_node * q) {
+int queueOffer(char * newValue, q_node * q) {
     int value = atoi(newValue);
     l_node * newNode = newListNode(value);
     if(q == NULL) {
@@ -27,11 +27,11 @@ int queueOffer(int newValue, q_node * q) {
     return q->size++;
 }
 
-int removeFromQueue(int newValue, q_node * q) {
+int removeFromQueue(char * newValue, q_node * q) {
     int value = atoi(newValue);
     l_node * aux;
     if(value == q->last->value) {
-    l_node * aux = q->last;
+        l_node * aux = q->last;
         q->last = aux->prev;
     }
 
@@ -39,26 +39,12 @@ int removeFromQueue(int newValue, q_node * q) {
     return q->size--;
 }
 
-int poll(int value, q_node * q) {
-    int ret = q->first->value;
-    q->first = removeFromList(ret, q->first);
-    q->size--;
-
-    return ret;
-}
-
-int peek(q_node * q) {
-    if(q == NULL || q->first == NULL) {
-        return -1;
-    }
-
-    return q->first->value;
-}
-
-
-
 void printQueue(q_node * q) {
     if(q != NULL && q->first != NULL) {
+        if(q->size == 1){
+            printf("[\t%d\t] <-- primero y ultimo\n", q->last->value);
+            return;
+        }
         printf("[\t%d\t] <-- ultimo\n", q->last->value);
         l_node * aux = q->last->prev;
         while(aux->prev != NULL) {
@@ -66,7 +52,13 @@ void printQueue(q_node * q) {
             aux = aux->prev;
         }
         printf("[\t%d\t] <-- primero \n", q->first->value);
-    } else {
-        printf("Lista vacia\n");
     }
+}
+
+int peekQueue(q_node * q) {
+    if(q == NULL || q->first == NULL) {
+        return -1;
+    }
+
+    return q->first->value;
 }
